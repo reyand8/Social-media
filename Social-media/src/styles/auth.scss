@@ -1,0 +1,67 @@
+.auth-form {
+  width: 440px;
+}
+
+.auth-icon {
+  max-width: 480px;
+  width: 100%;
+  margin-top: 20px;
+  margin-left: 40px;
+}
+
+.control-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.control-input {
+  display: block;
+  border: 1px solid var(--dark-color);
+  border-radius: 4px;
+  margin-top: 8px;
+  padding: 12px 20px;
+  color: var(--main-light-color);
+  background: var(--main-dark-color);
+  font-family: "JetBrains Mono", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  width: 100%;
+}
+
+.control-input--description {
+  height: 230px;
+}
+
+.password-input {
+  position: relative;
+}
+
+.password-eye-btn {
+  position: absolute;
+  top: 70%;
+  right: 12px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #FFFFFFBF;
+}
+
+.password-eye-btn.active svg path {
+  fill: var(--primary-color);
+}
+
+.auth-change-form {
+  display: flex;
+  justify-content: right;
+}
+
+.auth-btn {
+  font-size: 12px;
+  color: var(--main-text-color);
+  padding-top: 6px;
+  cursor: pointer;
+}
