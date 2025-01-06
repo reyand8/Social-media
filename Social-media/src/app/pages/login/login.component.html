@@ -1,0 +1,46 @@
+<form class="auth-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h1 class="h1 mb60">Login</h1>
+
+  <label for="username" class="control-label">
+    Your username
+    <input id="username"
+           class="control-input mb16"
+           formControlName="username"
+           type="text"
+           placeholder="Username">
+  </label>
+
+  <label for="password" class="control-label">
+    Your password
+    <span class="password-input">
+       <input id="password"
+              class="control-input"
+              formControlName="password"
+              [type]="getPasswordVisibility() ? 'text' : 'password'"
+              placeholder="Password">
+      <button
+        (click)="setPasswordVisibility(!getPasswordVisibility)"
+        [class.active]="getPasswordVisibility()"
+        class="password-eye-btn">
+         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 16 16" id="eye">
+           <path fill="#FFFFFFBF" d="M12.9 5.2l-.8.8c1.7.9 2.5 2.3 2.8 3-.7.9-2.8 3.1-7 3.1-.7 0-1.2-.1-1.8-.2l-.8.8c.8.3 1.7.4 2.6.4 5.7 0 8.1-4 8.1-4s-.6-2.4-3.1-3.9z"></path>
+           <path fill="#FFFFFFBF" d="M12 7.1c0-.3 0-.6-.1-.8L7.1 11c.3 0 .6.1.9.1 2.2 0 4-1.8 4-4zM15.3 0l-4.4 4.4C10.1 4.2 9.1 4 8 4 1.3 4 0 9.1 0 9.1s1 1.8 3.3 3L0 15.3v.7h.7L16 .7V0h-.7zM4 11.3C2.4 10.6 1.5 9.5 1.1 9c.3-.7 1.1-2.2 3.1-3.2-.1.4-.2.8-.2 1.3 0 1.1.5 2.2 1.3 2.9L4 11.3zm2.2-3.4-1 .2s-.3-.5-.3-1.2c0-.8.4-1.5.4-1.5.5-.3 1.3-.3 1.3-.3s-.5.9-.5 1.7c-.1.7.1 1.1.1 1.1z"></path>
+         </svg>
+      </button>
+    </span>
+  </label>
+
+  <div class="auth-change-form">
+    <div class="auth-btn mb32" (click)="goToSignup()">
+      <p>Create account</p>
+    </div>
+  </div>
+
+  <button type="submit"
+          [ngClass]="{'btn-disabled': !form.valid, 'btn-shadow btn': form.valid}"
+          [disabled]="!form.valid">
+    Enter
+  </button>
+
+</form>
+<img class="auth-icon" src="/assets/img/icon.png" alt="icon">
