@@ -31,10 +31,10 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-      // const payload: {username: string, password: string} = this.form.value as { username: string; password: string };
-      // this.authService.login(payload).subscribe(res => {
-      //   this.router.navigate([''])
-      // })
+      const payload: {username: string, password: string} = this.form.value as { username: string; password: string };
+      this.authService.login(payload).subscribe(res => {
+        this.router.navigate([''])
+      })
     }
   }
 
