@@ -1,5 +1,5 @@
 export interface Profile {
-  id: number | string,
+  id: number,
   username: string,
   image: string | null,
   firstName: string,
