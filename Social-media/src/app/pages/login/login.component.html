@@ -19,7 +19,7 @@
               [type]="getPasswordVisibility() ? 'text' : 'password'"
               placeholder="Password">
       <button
-        (click)="setPasswordVisibility(!getPasswordVisibility)"
+        (click)="setPasswordVisibility(!getPasswordVisibility())"
         [class.active]="getPasswordVisibility()"
         class="password-eye-btn">
          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 16 16" id="eye">
@@ -35,7 +35,9 @@
       <p>Create account</p>
     </div>
   </div>
-
+  @if (errorMessage()) {
+    <p class="auth-error">{{ errorMessage() }}</p>
+  }
   <button type="submit"
           [ngClass]="{'btn-disabled': !form.valid, 'btn-shadow btn': form.valid}"
           [disabled]="!form.valid">
