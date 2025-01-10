@@ -38,7 +38,7 @@ export class PersonController {
 
 	@Get('me')
 	@UseGuards(JwtAuthGuard)
-	getProfile(@Request() req: any): Promise<Omit<Person, 'password'>>  {
+	getProfile(@Request() req: any): Promise<boolean | Omit<Person, 'password'>>  {
 		return this.personService.findByUsername(req.user.username);
 	}
 
