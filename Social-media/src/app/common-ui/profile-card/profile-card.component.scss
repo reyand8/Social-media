@@ -1,0 +1,61 @@
+.profile-card {
+  border: 1px solid var(--main-light-color);
+  margin: 16px;
+  padding: 32px 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) 180px 1fr;
+  grid-gap: 32px;
+  max-width: 1180px;
+  width: 100%;
+}
+
+.avatar-name {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  grid-gap: 20px;
+}
+
+.profile-card__avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.profile-card__name {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-card__hobbies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  height: min-content;
+}
+
+.profile-card__action-btns {
+  max-width: 245px;
+  width: 100%;
+}
+
+.profile-card__follow_btn {
+  width: 240px;
+  gap: 8px;
+}
+
+.profile-card__following_btns {
+  display: flex;
+  gap: 8px;
+}
+.profile-card__send_btn {
+  width: 170px;
+  padding: 10px 16px;
+  gap: 8px;
+}
+
+.profile-card__unfollow_btn {
+  width: 60px;
+  padding: 8px;
+}
