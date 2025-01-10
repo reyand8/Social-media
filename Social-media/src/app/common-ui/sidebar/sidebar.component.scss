@@ -1,0 +1,88 @@
+:host {
+  display: block;
+  padding: 20px 12px;
+}
+
+.sidebar-logo {
+  width: 124px;
+}
+
+.sidebar__header {
+  margin: 4px 8px 34px 8px;
+  display: grid;
+  grid-template-columns: 32px 1fr 16px;
+  grid-gap: 12px;
+  align-items: center;
+
+  .profile-username {
+    display: flex;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  .profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+}
+
+.main-menu-list {
+  display: grid;
+  grid-gap: 8px;
+  list-style: none;
+}
+
+.menu-item {
+  padding: 16px 12px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  color: var(--main-text-color);
+  display: grid;
+  align-items: center;
+  grid-template-columns: 16px 1fr max-content;
+  grid-gap: 12px;
+  width: 100%;
+  text-align: left;
+  border-radius: 2px;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--main-hover-color);
+    color: var(--primary-color);
+    .menu-item-svg {
+      color: var(--primary-color);
+    }
+
+  }
+}
+
+.menu-item svg {
+  width: 19px;
+  height: 19px;
+}
+
+.following-title {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  margin-top: 26px;
+}
+
+.following {
+  margin-left: 8px;
+}
+
+.following-list {
+  overflow-y: auto;
+  height: 220px;
+}
+
+.following-list__empty {
+  font-size: 12px;
+  margin-left: 8px;
+}
