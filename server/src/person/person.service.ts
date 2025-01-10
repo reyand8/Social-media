@@ -8,7 +8,6 @@ import { UpdatePersonDto } from './dto/updatePerson.dto';
 
 type PublicPerson = Omit<Person, 'password'>;
 
-
 @Injectable()
 export class PersonService {
 	constructor(private prisma: PrismaService) {}
@@ -58,13 +57,13 @@ export class PersonService {
 		return person;
 	}
 
-	async findByUsername(username: string): Promise<PublicPerson | null> {
+	async findByUsername(username: string): Promise<PublicPerson | boolean> {
 		const person: PublicPerson = await this.prisma.person.findUnique({
 			where: { username },
 			select: this.publicPersonSelect,
 		});
 		if (!person) {
-		  throw new NotFoundException(`Person with username: ${username} not found`);
+		  return false;
 		}
 		return person;
 	}
