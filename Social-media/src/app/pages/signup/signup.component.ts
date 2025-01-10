@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { ModalWindowComponent } from './modalWindow/modal-window.component';
-import {AuthService} from '../../auth/auth.service';
+import { AuthService } from '../../auth/auth.service';
+import { ISignupPayload } from './signup.interface';
 
 
 interface ISignupForm {
@@ -28,11 +29,12 @@ export class SignupComponent {
   router: Router = inject(Router);
   isPasswordVisible: WritableSignal<boolean> = signal<boolean>(false)
   showModalWindow: WritableSignal<boolean> = signal<boolean>(false)
+  errorMessage:  WritableSignal<string> = signal<string>('')
 
   form: FormGroup<ISignupForm> = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     description: new FormControl('', Validators.required),
     hobbies: new FormArray<FormControl<string>>([], { validators: [Validators.required]}),
     profilePhoto: new FormControl<File | null>(null),
@@ -46,34 +48,41 @@ export class SignupComponent {
     return this.isPasswordVisible();
   }
 
-  setPasswordVisibility(visibility: boolean) {
+  setPasswordVisibility(visibility: boolean): void {
     return this.isPasswordVisible.set(visibility);
+  }
+
+  getPasswordError(): boolean | undefined {
+    const passwordControl = this.form.get('password');
+    return passwordControl?.hasError('minlength') && passwordControl.dirty;
+  }
+
+  onShowModalWindow(): void {
+    if (this.isMainFieldValid()) {
+      this.showModalWindow.set(true);
+    }
   }
 
   closeModal(): void {
     this.showModalWindow.set(false);
   }
 
-  onOpenModal(): void {
-    if (this.isMainFieldValid()) {
-      this.showModalWindow.set(true);
-    }
-  }
-
   onSubmit(): void {
     if (this.form.valid) {
       this.showModalWindow.set(false);
-      const payload = this.form.value as Required<{
-        firstName: string;
-        lastName: string;
-        password: string;
-        description: string;
-        hobbies: string[];
-        profilePhoto: File | null;
-      }>;
-      this.authService.signup(payload).subscribe((res): void => {
-        this.router.navigate([''])
-      })
+      const payload = this.form.value as Required<ISignupPayload>;
+      this.authService.signup(payload).subscribe({
+        next: (res) => {
+          this.router.navigate(['']);
+        },
+        error: (err): void => {
+          if (err.status.status === 400) {
+            this.errorMessage.set(err.error.message);
+          } else {
+            this.errorMessage.set('Unrecognized error');
+          }
+        },
+      });
     }
   }
 

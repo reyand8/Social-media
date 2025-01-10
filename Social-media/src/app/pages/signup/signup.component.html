@@ -1,4 +1,4 @@
-<form class="auth-form" [formGroup]="form" (ngSubmit)="onOpenModal()">
+<form class="auth-form" [formGroup]="form">
   <h1 class="h1 mb60">Sign Up</h1>
 
   <label for="firstName" class="control-label">
@@ -38,16 +38,23 @@
       </button>
     </span>
   </label>
-
+  @if (getPasswordError()) {
+    <p class="auth-error">
+      Password must be at least 6 characters long
+    </p>
+  }
   <div class="auth-change-form">
     <div class="auth-btn mb32"
             (click)="goToLogin()">
       <p>Sign in</p>
     </div>
   </div>
-
-  <button type="submit"
-          [ngClass]="{ 'btn-disabled': !isMainFieldValid(), 'btn-shadow btn': isMainFieldValid()}"
+  @if (errorMessage()) {
+    <p class="auth-error">{{ errorMessage() }}</p>
+  }
+  <button type="button"
+          (click)="onShowModalWindow()"
+          [ngClass]="{'btn-disabled': !isMainFieldValid(), 'btn-shadow btn': isMainFieldValid()}"
           [disabled]="!isMainFieldValid()">
     Create account
   </button>

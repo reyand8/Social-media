@@ -22,16 +22,24 @@ export class AuthService {
         return bcrypt.hash(password, 6);
     }
 
-    private generateUsername(firstName: string, lastName: string): string {
-        const randomNumbers: number = Math.floor(100 + Math.random() * 900);
-        return `${firstName.toLowerCase()}${lastName.toLowerCase()}${randomNumbers}`;
+    private async generateUsername(firstName: string, lastName: string): Promise<string> {
+        let username: string;
+        let randomNumbers: number;
+
+        const generateRandomNumbers = (): string => {
+            randomNumbers = Math.floor(1000 + Math.random() * 9000);
+            return `${firstName.toLowerCase()}${lastName.toLowerCase()}${randomNumbers}`;
+        };
+        username = generateRandomNumbers();
+        while (await this.usernameExists(username)) {
+            username = generateRandomNumbers();
+        }
+        return username;
     }
 
-    private async usernameExists(username: string): Promise<void> {
+    private async usernameExists(username: string): Promise<boolean> {
         const existingUser: IPerson | boolean = await this.personService.findByUsername(username);
-        if (existingUser) {
-            throw new Error('Username already exists');
-        }
+        return !!existingUser;
     }
 
     private async generateTokens(person: IUser): Promise<ITokens> {
@@ -45,9 +53,8 @@ export class AuthService {
     async register(createPersonDto: ICreatePersonDto): Promise<ITokens> {
         const { password, firstName, lastName  } = createPersonDto;
         createPersonDto.password = await this.hashPassword(password);
-        createPersonDto.username = this.generateUsername(firstName, lastName);
+        createPersonDto.username = await this.generateUsername(firstName, lastName);
 
-        await this.usernameExists(createPersonDto.username);
         const person: Person = await this.personService.create(createPersonDto);
 
         const { access_token, refresh_token } = await this.generateTokens(person);

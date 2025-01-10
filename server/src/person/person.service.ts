@@ -73,7 +73,7 @@ export class PersonService {
 			where: {username},
 		});
 		if (!person) {
-			throw new NotFoundException(`Person with username: ${username} not found`);
+			return null;
 		}
 		return person;
 	}

@@ -65,3 +65,9 @@
   padding-top: 6px;
   cursor: pointer;
 }
+
+.auth-error {
+  font-size: 14px;
+  color: var(--error-color);
+  margin: 12px 0;
+}

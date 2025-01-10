@@ -1,10 +1,10 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {catchError, Observable, tap, throwError} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
-import {ISignupPayload, ISignup, ITokenResponse, ILoginPayload} from './auth.interface';
+import { ISignupPayload, ISignup, ITokenResponse } from './auth.interface';
 
 
 @Injectable({
@@ -67,15 +67,22 @@ export class AuthService {
 
   sendSignupRequest(jsonPayload: ISignupPayload): Observable<ITokenResponse> {
     return this.http.post<ITokenResponse>(`${this.baseApiUrl}register`, jsonPayload).pipe(
-      tap((val: ITokenResponse) => this.saveTokens(val))
+      tap((val: ITokenResponse) => this.saveTokens(val)),
+      catchError((err) => {
+        return throwError(() => err);
+      })
     );
   }
 
   login(payload: {username: string, password: string}): Observable<ITokenResponse> {
-    return this.http.post<ITokenResponse>(`${this.baseApiUrl}login`, payload)
-      .pipe(tap((val: ITokenResponse): void => {
-        this.saveTokens(val)
-    }))
+    return this.http.post<ITokenResponse>(`${this.baseApiUrl}login`, payload).pipe(
+      tap((val: ITokenResponse): void => {
+        this.saveTokens(val);
+      }),
+      catchError((err) => {
+        return throwError(() => err);
+      })
+    );
   }
 
   logout(): void {
