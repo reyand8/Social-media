@@ -1,0 +1,29 @@
+.search{
+  width: 1200px;
+  margin: 32px 0 0 8px;
+}
+
+.profile-card__wrapper {
+  display: grid;
+  grid-gap: 8px;
+}
+
+.search-input {
+  font-family: "JetBrains Mono", sans-serif;
+  outline: none;
+  display: block;
+  border: 1px solid var(--dark-color);
+  border-radius: 4px;
+  margin-top: 8px;
+  padding: 12px 20px;
+  color: var(--main-light-color);
+  background: var(--main-dark-color);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  width: 100%;
+}
+
+.not-found {
+  margin-top: 20px;
+}
