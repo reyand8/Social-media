@@ -17,6 +17,12 @@ export class ProfileService {
     return this.http.get<Profile[]>(`${this.baseApiUrl}persons`)
   }
 
+  searchProfiles(person: string): Observable<Profile[]> {
+    return this.http.get<Profile[]>(`${this.baseApiUrl}persons/search`, {
+      params: { person },
+    });
+  }
+
   getPerson(id: string): Observable<Profile> {
     return this.http.get<Profile>(`${this.baseApiUrl}persons/${id}`)
   }

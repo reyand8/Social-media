@@ -42,6 +42,29 @@ export class PersonService {
 		});
 	}
 
+	async findBySearchString(searchString?: string): Promise<Person[]> {
+
+		const data = this.prisma.person.findMany({
+			where: {
+				OR: [
+					{
+						username: {
+							contains: searchString,
+							mode: 'insensitive'
+						}
+					},
+					{
+						description: {
+							contains: searchString,
+							mode: 'insensitive'
+						}
+					}
+				]
+			}
+		});
+		return data
+	}
+
 	async findById(personId: number): Promise<PublicPerson> {
 		const id: number = Number(personId);
 		if (isNaN(id)) {

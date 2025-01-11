@@ -22,6 +22,13 @@ export class PersonController {
 		return this.personService.findAll(+take, +skip);
 	}
 
+	@Get('search')
+	async findBySearchString(
+		@Query('person') person?: string,
+	): Promise<Person[]> {
+		return this.personService.findBySearchString(person);
+	}
+
 	// @Get(':id')
 	// async findById(@Param('id') id: string) {
 	// 	const personId = Number(id);
