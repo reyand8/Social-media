@@ -20,7 +20,6 @@ export class AuthService {
 
   get isAuth() {
     if (!this.token) {
-      console.log(this.cookieService)
       this.token = this.cookieService.get('token')
       this.refreshToken = this.cookieService.get('refreshToken')
     }
