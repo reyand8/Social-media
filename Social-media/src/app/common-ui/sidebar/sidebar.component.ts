@@ -1,5 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {AsyncPipe, JsonPipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
 import {Observable, switchMap} from 'rxjs';
 
 import { SubscriberCardComponent } from './following-card/following-card.component';
@@ -13,7 +14,8 @@ import { SvgComponent } from '../svg/svg.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [SvgComponent, AsyncPipe, SubscriberCardComponent, JsonPipe, ImgUrlPipe],
+  imports: [SvgComponent, AsyncPipe, SubscriberCardComponent,
+    JsonPipe, ImgUrlPipe, RouterLink],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
@@ -32,9 +34,14 @@ export class SidebarComponent {
 
   menuItems: {label: string, icon: string, link: string}[] = [
     {
-      label: 'My Profile',
+      label: 'Home',
       icon: 'home',
       link: '',
+    },
+    {
+      label: 'My Profile',
+      icon: 'profile',
+      link: 'profile',
     },
     {
       label: 'Chats',
@@ -49,7 +56,7 @@ export class SidebarComponent {
     {
       label: 'Logout',
       icon: 'logout',
-      link: 'logout',
+      link: '',
     }
   ]
 

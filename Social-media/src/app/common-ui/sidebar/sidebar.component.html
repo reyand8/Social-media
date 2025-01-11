@@ -11,7 +11,7 @@
   <ul class="main-menu-list">
     @for(menuItem of menuItems; track menuItem) {
       <li>
-        <button class="menu-item" (click)="menuItem.label === 'Logout' ? onLogout() : null">
+        <button class="menu-item" [routerLink]="[menuItem.link]" (click)="menuItem.label === 'Logout' ? onLogout() : null">
           <svg [icon]="menuItem.icon" class="menu-item-svg"></svg>
           <span>{{menuItem.label}}</span>
         </button>
