@@ -1,7 +1,7 @@
 import {
 	Controller, Get,
 	Body, Patch, Param, Delete,
-	Query, Request, UseGuards
+	Query, Request, UseGuards, Post, NotFoundException
 } from '@nestjs/common';
 
 import { Person } from '@prisma/client';
@@ -23,10 +23,45 @@ export class PersonController {
 	}
 
 	@Get('search')
+	@UseGuards(JwtAuthGuard)
 	async findBySearchString(
 		@Query('person') person?: string,
 	): Promise<Person[]> {
 		return this.personService.findBySearchString(person);
+	}
+
+	@Post(':id/follow')
+	@UseGuards(JwtAuthGuard)
+	async followPerson(@Param('id') followedId: string, @Request() req: any): Promise<void> {
+		const followerId = req.user.sub;
+		if (followedId === followerId) {
+			throw new NotFoundException('You can not follow yourself');
+		}
+		try {
+			await this.personService.followPerson(+followerId, +followedId);
+		} catch (error) {
+			if (error instanceof NotFoundException) {
+				throw new NotFoundException('You are already following this user');
+			}
+			throw error;
+		}
+	}
+
+	@Post(':id/unfollow')
+	@UseGuards(JwtAuthGuard)
+	async unfollowPerson(@Param('id') followedId: string, @Request() req: any): Promise<void> {
+		const followerId = req.user.sub;
+		if (followedId === followerId) {
+			throw new NotFoundException('You cannot unfollow yourself');
+		}
+		try {
+			await this.personService.unfollowPerson(+followerId, +followedId);
+		} catch (error) {
+			if (error instanceof NotFoundException) {
+				throw new NotFoundException('You are not following this user');
+			}
+			throw error;
+		}
 	}
 
 	// @Get(':id')
@@ -39,6 +74,7 @@ export class PersonController {
 	// }
 
 	@Get(':id/following')
+	@UseGuards(JwtAuthGuard)
 	async getFollowing(@Param('id') id: string): Promise<Omit<Person, 'password'>[]> {
 		return this.personService.getFollowing(+id);
 	}

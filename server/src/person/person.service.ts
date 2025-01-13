@@ -43,8 +43,7 @@ export class PersonService {
 	}
 
 	async findBySearchString(searchString?: string): Promise<Person[]> {
-
-		const data = this.prisma.person.findMany({
+		return this.prisma.person.findMany({
 			where: {
 				OR: [
 					{
@@ -62,7 +61,48 @@ export class PersonService {
 				]
 			}
 		});
-		return data
+	}
+
+	async followPerson(followerId: number, followedId: number): Promise<void> {
+		const existingFollow = await this.prisma.follower.findUnique({
+			where: {
+				followerId_followedId: {
+					followerId,
+					followedId
+				}
+			}
+		});
+		if (existingFollow) {
+			throw new Error('You are already following this user');
+		}
+		await this.prisma.follower.create({
+			data: {
+				followerId,
+				followedId
+			}
+		});
+	}
+
+	async unfollowPerson(followerId: number, followedId: number): Promise<void> {
+		const existingFollow = await this.prisma.follower.findUnique({
+			where: {
+				followerId_followedId: {
+					followerId,
+					followedId
+				}
+			}
+		});
+		if (!existingFollow) {
+			throw new NotFoundException('You are not following this user');
+		}
+		await this.prisma.follower.delete({
+			where: {
+				followerId_followedId: {
+					followerId,
+					followedId
+				}
+			}
+		});
 	}
 
 	async findById(personId: number): Promise<PublicPerson> {

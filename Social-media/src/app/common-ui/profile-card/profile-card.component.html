@@ -15,7 +15,9 @@
     </div>
   </div>
   <div class="profile-card__action-btns">
-    <div *ngIf="profile.id === (myProfile$ | async)?.id" class="btn profile-card__follow_btn">
+    <div *ngIf="profile.id === (myProfile$ | async)?.id"
+         [routerLink]="['/profile']"
+         class="btn profile-card__follow_btn">
       My Profile
     </div>
     <div *ngIf="profile.id !== (myProfile$ | async)?.id">
@@ -25,13 +27,13 @@
             <img src="assets/img/svg/send.svg" alt="send">
             Send message
           </div>
-          <div class="btn profile-card__unfollow_btn">
+          <div class="btn profile-card__unfollow_btn" (click)="unfollowPerson(profile)">
             <img src="assets/img/svg/unfollow.svg" alt="unfollow">
           </div>
         </div>
       </div>
       <ng-template #followButton>
-        <div class="btn profile-card__follow_btn">
+        <div (click)="followPerson(profile)" class="btn profile-card__follow_btn">
           <img src="assets/img/svg/add.svg" alt="add">
           Follow
         </div>

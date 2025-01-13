@@ -1,11 +1,9 @@
 <img src="/assets/img/icon.png" alt="logo" class="sidebar-logo ml16 mb20">
 <div class="sidebar__header" *ngIf="profile">
-
     <img class="profile-image" [src]="profile.image | imgUrl" [alt]="profile?.lastName">
     <div class="profile-username">
       {{ profile.username }}
     </div>
-
 </div>
 
 <nav>
