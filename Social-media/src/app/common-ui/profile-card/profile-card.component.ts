@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import { Observable } from 'rxjs';
 
 import {Profile} from '../../data/interfaces/profile.interface';
@@ -12,7 +12,9 @@ import {ImgUrlPipe} from '../../helpers/pipes/img-url.pipe';
   standalone: true,
   imports: [
     ImgUrlPipe,
-    AsyncPipe
+    AsyncPipe,
+    NgIf,
+    NgForOf
   ],
   styleUrls: ['./profile-card.component.scss']
 })

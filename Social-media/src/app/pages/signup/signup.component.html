@@ -38,20 +38,15 @@
       </button>
     </span>
   </label>
-  @if (getPasswordError()) {
-    <p class="auth-error">
-      Password must be at least 6 characters long
-    </p>
-  }
+  <p class="auth-error" *ngIf="getPasswordError()">
+    Password must be at least 6 characters long
+  </p>
   <div class="auth-change-form">
-    <div class="auth-btn mb32"
-            (click)="goToLogin()">
+    <div class="auth-btn mb32" (click)="goToLogin()">
       <p>Sign in</p>
     </div>
   </div>
-  @if (errorMessage()) {
-    <p class="auth-error">{{ errorMessage() }}</p>
-  }
+  <p class="auth-error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
   <button type="button"
           (click)="onShowModalWindow()"
           [ngClass]="{'btn-disabled': !isMainFieldValid(), 'btn-shadow btn': isMainFieldValid()}"

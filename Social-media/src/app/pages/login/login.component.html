@@ -2,7 +2,7 @@
   <h1 class="h1 mb60">Login</h1>
 
   <label for="username" class="control-label">
-    Your username
+    Username
     <input id="username"
            class="control-input mb16"
            formControlName="username"
@@ -11,7 +11,7 @@
   </label>
 
   <label for="password" class="control-label">
-    Your password
+    Password
     <span class="password-input">
        <input id="password"
               class="control-input"
@@ -19,6 +19,7 @@
               [type]="getPasswordVisibility() ? 'text' : 'password'"
               placeholder="Password">
       <button
+        type="button"
         (click)="setPasswordVisibility(!getPasswordVisibility())"
         [class.active]="getPasswordVisibility()"
         class="password-eye-btn">
@@ -35,14 +36,11 @@
       <p>Create account</p>
     </div>
   </div>
-  @if (errorMessage()) {
-    <p class="auth-error">{{ errorMessage() }}</p>
-  }
+  <p class="auth-error" *ngIf="errorMessage()">{{ errorMessage() }}</p>
   <button type="submit"
           [ngClass]="{'btn-disabled': !form.valid, 'btn-shadow btn': form.valid}"
           [disabled]="!form.valid">
     Enter
   </button>
-
 </form>
 <img class="auth-icon" src="/assets/img/icon.png" alt="icon">

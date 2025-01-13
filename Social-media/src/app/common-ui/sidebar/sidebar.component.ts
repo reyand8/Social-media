@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {AsyncPipe, JsonPipe} from '@angular/common';
+import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {Observable, switchMap} from 'rxjs';
 
@@ -15,7 +15,7 @@ import { SvgComponent } from '../svg/svg.component';
   selector: 'app-sidebar',
   standalone: true,
   imports: [SvgComponent, AsyncPipe, SubscriberCardComponent,
-    JsonPipe, ImgUrlPipe, RouterLink],
+    JsonPipe, ImgUrlPipe, RouterLink, NgForOf, NgIf],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })

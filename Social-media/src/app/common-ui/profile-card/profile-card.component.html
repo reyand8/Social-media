@@ -1,45 +1,45 @@
-@if (profile) {
-  <div class="profile-card">
-    <div class="avatar-name">
-      <img [src]="profile.image | imgUrl" alt="avatar" class="profile-card__avatar">
-      <div class="profile-card__name">
-        <strong class="h6">{{ profile.firstName }} {{ profile.lastName }}</strong>
-        <span class="subtitle">{{ profile.username }}</span>
-      </div>
-    </div>
-    <div class="profile-card__description">
-      {{ profile.description }}
-    </div>
-    <div class="profile-card__hobbies">
-      @for (tag of profile.hobby; track tag) {
-        <div class="hobby-tag">{{ tag }}</div>
-      }
-    </div>
-    <div class="profile-card__action-btns">
-      @if (profile.id === (myProfile$ | async)?.id) {
-        <div class="btn profile-card__follow_btn">
-          My Profile
-        </div>
-      } @else {
-        @if (followingIds.includes(profile.id)) {
-          <div class="profile-card__following_btns">
-            <div class="btn profile-card__send_btn">
-              <img src="assets/img/svg/send.svg" alt="send">
-              Send message
-            </div>
-            <div class="btn profile-card__unfollow_btn">
-              <img src="assets/img/svg/unfollow.svg" alt="unfollow">
-            </div>
-          </div>
-        } @else {
-          <div class="btn profile-card__follow_btn">
-            <img src="assets/img/svg/add.svg" alt="add">
-            Follow
-          </div>
-        }
-      }
+<div *ngIf="profile; else errorTemplate" class="profile-card">
+  <div class="avatar-name">
+    <img [src]="profile.image | imgUrl" alt="avatar" class="profile-card__avatar">
+    <div class="profile-card__name">
+      <strong class="h6">{{ profile.firstName }} {{ profile.lastName }}</strong>
+      <span class="subtitle">{{ profile.username }}</span>
     </div>
   </div>
-} @else {
-  Error
-}
+  <div class="profile-card__description">
+    {{ profile.description }}
+  </div>
+  <div class="profile-card__hobbies">
+    <div class="hobby-tag" *ngFor="let tag of profile.hobby">
+      {{ tag }}
+    </div>
+  </div>
+  <div class="profile-card__action-btns">
+    <div *ngIf="profile.id === (myProfile$ | async)?.id" class="btn profile-card__follow_btn">
+      My Profile
+    </div>
+    <div *ngIf="profile.id !== (myProfile$ | async)?.id">
+      <div *ngIf="followingIds.includes(profile.id); else followButton">
+        <div class="profile-card__following_btns">
+          <div class="btn profile-card__send_btn">
+            <img src="assets/img/svg/send.svg" alt="send">
+            Send message
+          </div>
+          <div class="btn profile-card__unfollow_btn">
+            <img src="assets/img/svg/unfollow.svg" alt="unfollow">
+          </div>
+        </div>
+      </div>
+      <ng-template #followButton>
+        <div class="btn profile-card__follow_btn">
+          <img src="assets/img/svg/add.svg" alt="add">
+          Follow
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<ng-template #errorTemplate>
+  <p>Error</p>
+</ng-template>
