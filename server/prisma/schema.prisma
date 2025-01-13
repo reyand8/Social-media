@@ -31,5 +31,5 @@ model Follower {
   follower Person @relation("FollowingRelation", fields: [followerId], references: [id])
   followed Person @relation("FollowerRelation", fields: [followedId], references: [id])
 
-  @@unique([followerId, followedId]) // Уникальная пара "кто подписан - на кого подписан"
+  @@unique([followerId, followedId])
 }
