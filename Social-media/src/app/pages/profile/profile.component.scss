@@ -1,0 +1,32 @@
+.my-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1024px;
+  width: 100%;
+  margin-bottom: 120px;
+}
+.my-profile-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.my-profile-input {
+  width: 490px;
+
+}
+
+.my-profile-successfully {
+  margin: 12px 0;
+  color: var(--successfully-color);
+}
+
+.my-profile-invalid {
+  margin: 12px 0;
+  color: var(--error-color);
+}
+
+.my-profile-btn {
+  max-width: 195px;
+  width: 100%;
+}

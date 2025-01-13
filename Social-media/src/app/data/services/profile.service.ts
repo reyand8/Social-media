@@ -11,7 +11,6 @@ import {Profile} from '../interfaces/profile.interface';
 export class ProfileService {
   http: HttpClient = inject(HttpClient)
   baseApiUrl: string = 'http://localhost:5001/api/'
-  myProfile: WritableSignal<Profile | null> = signal<Profile | null>(null)
 
   private followingSubject: BehaviorSubject<Profile[]> = new BehaviorSubject<Profile[]>([]);
   public following$: Observable<Profile[]> = this.followingSubject.asObservable();
@@ -55,16 +54,7 @@ export class ProfileService {
   }
 
   getMyProfile(): Observable<Profile | null> {
-    return this.http.get<Profile>(`${this.baseApiUrl}persons/me`).pipe(
-      tap({
-        next: (res): void => {
-          this.myProfile.set(res);
-        },
-      }),
-      catchError(() => {
-        return of(null);
-      })
-    );
+    return this.http.get<Profile>(`${this.baseApiUrl}persons/me`)
   }
 
   getFollowing(userId: string): Observable<Profile[]> {
@@ -94,4 +84,9 @@ export class ProfileService {
     }
     this.followingSubject.next(updatedFollowing);
   }
+
+  updateProfile(data: Partial<Profile>): Observable<Profile> {
+    return this.http.patch<Profile>(`${this.baseApiUrl}persons/me`, data);
+  }
+
 }

@@ -88,7 +88,7 @@ export class PersonController {
 	@Patch('me')
 	@UseGuards(JwtAuthGuard)
 	async update(@Body() updatePersonDto: UpdatePersonDto, @Request() req: any): Promise<Person> {
-		return this.personService.update(req.user.id, updatePersonDto);
+		return this.personService.update(req.user.sub, updatePersonDto);
 	}
 
 	@Delete('me')
