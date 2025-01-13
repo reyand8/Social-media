@@ -37,38 +37,6 @@
   margin-bottom: 12px;
 }
 
-.hobby-wrapper {
-  max-width: 360px;
-  width: 100%;
-}
-
-.hobby {
-  display: inline-block;
-  word-wrap: break-word;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  background-color: var(--gray-color);
-  max-width: 160px;
-  padding: 5px 10px;
-  margin: 7px;
-  border-radius: 20px;
-}
-
-.btn-add-hobby {
-  background-color: var(--primary-color);
-  color: var(--main-text-color);
-  border: none;
-  border-radius: 12px;
-  padding: 8px 14px;
-  transform: translateY(-50%);
-  margin-top: 12px;
-}
-
-.btn-remove-hobby {
-  all: unset;
-  cursor: pointer;
-}
-
 .photo-preview {
   max-width: 120px;
   width: 100%;

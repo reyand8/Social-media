@@ -1,4 +1,4 @@
-<div class="profile-card__wrapper">
+<div class="profile-card__wrapper mt32">
   @for (profile of profiles$ | async ; track profile.id) {
     <app-profile-card [myProfile$]="myProfile$" [followingIds]="followingIds"  [profile] = "profile">
     </app-profile-card>

@@ -13,6 +13,7 @@
   --gray-color: #5F646D;
   --dark-color: #000000FF;
   --error-color: #ff5151;
+  --successfully-color: #55ea40;
 }
 
 *,
@@ -101,4 +102,36 @@ body {
 .subtitle {
   font-size: 14px;
   line-height: 20px;
+}
+
+.hobby-wrapper {
+  max-width: 360px;
+  width: 100%;
+}
+
+.hobby {
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: var(--gray-color);
+  max-width: 160px;
+  padding: 5px 10px;
+  margin: 7px;
+  border-radius: 20px;
+}
+
+.btn-add-hobby {
+  background-color: var(--primary-color);
+  color: var(--main-text-color);
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin: 16px 0;
+  cursor: pointer;
+}
+
+.btn-remove-hobby {
+  all: unset;
+  cursor: pointer;
 }
