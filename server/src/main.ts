@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
-
+import * as bodyParser from 'body-parser';
 import { AppModule } from './app.module';
 
 /**
@@ -18,7 +18,8 @@ async function bootstrap(): Promise<void> {
   app.enableCors();
   app.enableShutdownHooks()
 
-
+  app.use(bodyParser.json({ limit: '5mb' }));  // Увеличьте limit до необходимого размера
+  app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
   await app.listen(PORT, (): void => {
     Logger.log(`http://localhost:${PORT}`, `Server starts on host`);
