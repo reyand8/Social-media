@@ -5,7 +5,9 @@ import { ExtractJwt } from 'passport-jwt';
 
 import { PersonService } from '../person/person.service';
 
-
+/**
+ * Strategy for validating JWT tokens using Passport.
+ */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(private personService: PersonService) {

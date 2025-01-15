@@ -8,7 +8,9 @@ import {ICreatePersonDto, ITokens, IUser} from './auth.interface';
 
 type PublicPerson = Omit<Person, 'password'>;
 
-
+/**
+ * Service for managing authentication-related operations.
+ */
 @Injectable()
 export class AuthService {
     constructor(
@@ -16,6 +18,11 @@ export class AuthService {
         private jwtService: JwtService,
     ) {}
 
+    /**
+     * Hashes the given password using bcrypt.
+     * @param password - The password to hash.
+     * @returns A promise resolving to the hashed password.
+     */
     private async hashPassword(password: string): Promise<string> {
         if (!password) {
             throw new Error('Password is required to hash.');
@@ -23,6 +30,12 @@ export class AuthService {
         return bcrypt.hash(password, 6);
     }
 
+    /**
+     * Generates a unique username based on the user's first and last name.
+     * @param firstName - User's first name.
+     * @param lastName - User's last name.
+     * @returns A promise resolving to the generated username.
+     */
     private async generateUsername(firstName: string, lastName: string): Promise<string> {
         let username: string;
         let randomNumbers: number;
@@ -38,11 +51,21 @@ export class AuthService {
         return username;
     }
 
+    /**
+     * Checks if a username already exists in the database.
+     * @param username - The username to check.
+     * @returns A promise resolving to true if the username exists, otherwise false.
+     */
     private async usernameExists(username: string): Promise<boolean> {
         const existingUser: PublicPerson | boolean = await this.personService.findByUsername(username);
         return !!existingUser;
     }
 
+    /**
+     * Generates access and refresh tokens for a user.
+     * @param person - The user for whom tokens are being generated.
+     * @returns A promise resolving to the tokens.
+     */
     private async generateTokens(person: IUser): Promise<ITokens> {
         const payload: {username: string, sub: number} =
             { username: person.username, sub: person.id };
@@ -51,6 +74,11 @@ export class AuthService {
         return { access_token, refresh_token };
     }
 
+    /**
+     * Registers a new user.
+     * @param createPersonDto - Data transfer object containing the user's registration details.
+     * @returns A promise resolving to the user's tokens.
+     */
     async register(createPersonDto: ICreatePersonDto): Promise<ITokens> {
         const { password, firstName, lastName  } = createPersonDto;
         createPersonDto.password = await this.hashPassword(password);
@@ -62,6 +90,11 @@ export class AuthService {
         return { access_token, refresh_token };
     }
 
+    /**
+     * Logs a user into the system and generates tokens.
+     * @param person - The user to log in.
+     * @returns A promise resolving to the user's tokens.
+     */
     async login(person: Person): Promise<ITokens> {
         const payload: { username: string, sub: number }
             = { username: person.username, sub: person.id };
@@ -73,6 +106,12 @@ export class AuthService {
         };
     }
 
+    /**
+     * Validates a user's credentials.
+     * @param username - The username to validate.
+     * @param pass - The password to validate.
+     * @returns A promise resolving to the user if valid, otherwise null.
+     */
     async validateUser(username: string, pass: string): Promise<Person | null> {
         const user: Person = await this.personService.findByUsernameForValidation(username);
         if (user && await bcrypt.compare(pass, user.password)) {

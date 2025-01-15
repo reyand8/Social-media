@@ -18,6 +18,9 @@ export interface IPerson {
 const prisma = new PrismaClient();
 dotenv.config();
 
+/**
+ * Main function to seed the database with initial data and create subscriptions.
+ */
 async function main(): Promise<void> {
 	console.log('Database seeding started...');
 	await Promise.all(
@@ -39,6 +42,9 @@ async function main(): Promise<void> {
 	console.log('Database was seeded successfully...');
 }
 
+/**
+ * Creates random follow relationships (subscriptions) between seeded persons.
+ */
 async function createSubscriptions(): Promise<void> {
 	const persons: IPerson[] = await prisma.person.findMany();
 	if (persons.length < 2) {
@@ -65,17 +71,29 @@ async function createSubscriptions(): Promise<void> {
 	);
 }
 
-
+/**
+ * Returns a random subset of users from the given array, within the specified range.
+ * @param users - Array of users to select from.
+ * @param min - Minimum number of users to select.
+ * @param max - Maximum number of users to select.
+ */
 function getRandomUsers(users: any[], min: number, max: number): any[] {
 	const count: number = Math.floor(Math.random() * (max - min + 1)) + min;
 	return shuffleArray(users).slice(0, count);
 }
 
-
+/**
+ * Shuffles an array in random order.
+ * @param array - Array to shuffle.
+ * @returns A shuffled array.
+ */
 function shuffleArray(array: any[]): any[] {
 	return array.sort(() => Math.random() - 0.5);
 }
 
+/**
+ * Entry point: Executes the seeding process and handles errors.
+ */
 main()
 	.catch((e): void => {
 		console.error('Error seeding the database:', e);
