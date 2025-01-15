@@ -1,9 +1,9 @@
 import {Component, inject, Input} from '@angular/core';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {catchError, Observable} from 'rxjs';
+import {catchError, Observable, of} from 'rxjs';
 
-import {Profile} from '../../data/interfaces/profile.interface';
+import {IProfile} from '../../data/interfaces/profile.interface';
 import {ImgUrlPipe} from '../../helpers/pipes/img-url.pipe';
 import {ProfileService} from '../../data/services/profile.service';
 
@@ -24,18 +24,18 @@ import {ProfileService} from '../../data/services/profile.service';
 export class ProfileCardComponent {
   profileService: ProfileService = inject(ProfileService)
 
-  @Input() profile!: Profile;
-  @Input() myProfile$!: Observable<Profile | null>;
+  @Input() profile!: IProfile;
+  @Input() myProfile$!: Observable<IProfile | null>;
   @Input() followingIds!: number[];
 
   errorMessage: string | null = null;
 
 
-  followPerson(followedPerson: Profile): void {
+  followPerson(followedPerson: IProfile): void {
     this.profileService.followPerson(followedPerson).pipe(
-      catchError((error) => {
+      catchError((error): Observable<null> => {
         this.handleError('Following error: ', error);
-        throw error;
+        return of(null);
       })
     ).subscribe((): void => {
       this.followingIds.push(followedPerson.id);
@@ -43,14 +43,14 @@ export class ProfileCardComponent {
     });
   }
 
-  unfollowPerson(followedPerson: Profile): void {
-    const {id} = followedPerson;
+  unfollowPerson(followedPerson: IProfile): void {
+    const { id } = followedPerson;
     this.profileService.unfollowPerson(followedPerson).pipe(
-      catchError((error) => {
+      catchError((error): Observable<null> => {
         this.handleError('Unfollowing error: ', error);
-        throw error;
+        return of(null);
       })
-    ).subscribe(() => {
+    ).subscribe((): void => {
       this.profileService.updateFollowingList(followedPerson, 'unfollow');
       this.followingIds = this.followingIds.filter((followingId: number): boolean => followingId !== id);
       this.errorMessage = null;

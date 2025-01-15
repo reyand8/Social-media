@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
 import { ISignupPayload, ISignup, ITokenResponse } from './auth.interface';
+import {processImage} from '../helpers/utils/processImage';
 
 
 @Injectable({
@@ -46,22 +47,8 @@ export class AuthService {
   }
 
   processImageAndSignup(profilePhoto: File, jsonPayload: ISignupPayload): Observable<ITokenResponse> {
-    return new Observable<ITokenResponse>((observer) => {
-      const reader: FileReader = new FileReader();
-      reader.onload = (): void => {
-        jsonPayload.image = reader.result;
-        this.sendSignupRequest(jsonPayload).subscribe({
-          next: (val: ITokenResponse) => {
-            this.saveTokens(val);
-            observer.next(val);
-            observer.complete();
-          },
-          error: (err) => observer.error(err),
-        });
-      };
-      reader.onerror = (err) => observer.error(err);
-      reader.readAsDataURL(profilePhoto);
-    });
+    return processImage(
+      profilePhoto, jsonPayload, (payload) => this.sendSignupRequest(payload));
   }
 
   sendSignupRequest(jsonPayload: ISignupPayload): Observable<ITokenResponse> {

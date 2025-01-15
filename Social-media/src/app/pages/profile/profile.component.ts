@@ -4,7 +4,6 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 
 import { ProfileService } from '../../data/services/profile.service';
-import { Profile } from '../../data/interfaces/profile.interface';
 import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
 import {IMyProfile, IMyProfileForm} from './profile.interface';
 
@@ -24,19 +23,42 @@ import {IMyProfile, IMyProfileForm} from './profile.interface';
 })
 export class ProfileComponent {
   profileService: ProfileService = inject(ProfileService);
-  myProfile$: Observable<null | Profile> = this.profileService.getMyProfile();
+  myProfile$: Observable<any> = this.profileService.getMyProfile();
   isSuccessfully: WritableSignal<boolean> = signal<boolean>(false);
+  imagePreview: string | null = null;
 
   form: FormGroup<IMyProfileForm> = new FormGroup({
     firstName: new FormControl('', { validators: Validators.required, nonNullable: true }),
     lastName: new FormControl('', { validators: Validators.required, nonNullable: true }),
     description: new FormControl('', { validators: Validators.required, nonNullable: true }),
-    hobbies: new FormArray<FormControl<string>>([]),
+    hobby: new FormArray<FormControl<string>>([]),
+    image: new FormControl<string | File | null>(null),
   });
 
   constructor() {
     this.initializeForm();
   }
+
+  triggerFileInput(): void {
+    const fileInput = document.querySelector<HTMLInputElement>('.file-input');
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onImageSelected(event: Event): void {
+    const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.form.get('image')?.setValue(file);
+
+      const reader: FileReader = new FileReader();
+      reader.onload = (): void => {
+        this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
 
   initializeForm(): void {
     this.myProfile$.subscribe(profile => {
@@ -45,8 +67,9 @@ export class ProfileComponent {
           firstName: profile.firstName,
           lastName: profile.lastName,
           description: profile.description,
+          image: profile.image || null,
         });
-        const hobbiesArray = this.form.get('hobbies') as FormArray;
+        const hobbiesArray = this.form.get('hobby') as FormArray;
         hobbiesArray.clear();
         profile.hobby.forEach((hobby: string) => hobbiesArray.push(new FormControl(hobby)));
       }
@@ -63,30 +86,25 @@ export class ProfileComponent {
 
   addHobby(hobbyInput: HTMLInputElement): void {
     const hobbyItem: string = hobbyInput.value.trim();
-    if (hobbyItem && !this.hobbies.controls.some(control => control.value === hobbyItem)) {
-      this.hobbies.push(new FormControl(hobbyItem));
+    if (hobbyItem && !this.hobby.controls.some(control => control.value === hobbyItem)) {
+      this.hobby.push(new FormControl(hobbyItem));
       hobbyInput.value = '';
     }
   }
 
-  get hobbies(): FormArray {
-    return this.form.get('hobbies') as FormArray;
+  get hobby(): FormArray {
+    return this.form.get('hobby') as FormArray;
   }
 
   removeHobby(index: number): void {
-    this.hobbies.removeAt(index);
+    this.hobby.removeAt(index);
   }
 
   saveChanges(): void {
     if (this.form.valid) {
-      const updatedProfile: Partial<IMyProfile> = {
-        firstName: this.form.value.firstName,
-        lastName: this.form.value.lastName,
-        description: this.form.value.description,
-        hobby: this.form.value.hobbies,
-      };
+      const updatedProfile = this.form.value as Required<IMyProfile>;
       this.profileService.updateProfile(updatedProfile).subscribe({
-        next: (profile): void => {
+        next: (profile: IMyProfile): void => {
           this.isSuccessfully.set(true);
           this.form.patchValue(profile);
         },

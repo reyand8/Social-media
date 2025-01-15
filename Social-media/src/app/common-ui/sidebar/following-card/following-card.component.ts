@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { ImgUrlPipe } from '../../../helpers/pipes/img-url.pipe';
-import { Profile } from '../../../data/interfaces/profile.interface';
+import { IProfile } from '../../../data/interfaces/profile.interface';
 
 
 @Component({
@@ -12,5 +12,5 @@ import { Profile } from '../../../data/interfaces/profile.interface';
   styleUrl: './following-card.component.scss'
 })
 export class SubscriberCardComponent {
-  @Input() profile!: Profile
+  @Input() profile!: IProfile
 }

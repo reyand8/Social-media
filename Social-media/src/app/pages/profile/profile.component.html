@@ -1,7 +1,26 @@
 <div class="my-profile mt60" *ngIf="myProfile$ | async as profile; else loading">
   <h1 class="h1 mb60">My Profile</h1>
   <form class="my-profile-form" [formGroup]="form" (ngSubmit)="saveChanges()">
-    <img class="profile-image" [src]="profile.image | imgUrl" [alt]="profile?.lastName">
+    <div class="profile-image-wrapper">
+      <img *ngIf="imagePreview; else imageProfile" [src]="imagePreview" alt="Profile Photo" class="profile-image" (click)="triggerFileInput()" />
+      <ng-template #imageProfile>
+        <img
+          class="profile-image"
+          [src]="profile.image | imgUrl"
+          [alt]="profile?.lastName"
+          (click)="triggerFileInput()"
+        />
+      </ng-template>
+      <input
+        type="file"
+        accept="image/*"
+        class="file-input"
+        (change)="onImageSelected($event)"
+        style="display: none"
+      />
+    </div>
+
+
 
     <label for="firstName" class="control-label">
       First Name
@@ -23,7 +42,7 @@
     <label class="control-label">
       Hobbies
       <div class="hobby-wrapper my-profile-input">
-        <span *ngFor="let hob of hobbies.controls; let i = index" class="hobby">
+        <span *ngFor="let hob of hobby.controls; let i = index" class="hobby">
           {{ hob.value }}
           <button type="button" class="btn-remove-hobby" (click)="removeHobby(i)">Х</button>
         </span>

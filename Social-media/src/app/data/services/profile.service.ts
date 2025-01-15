@@ -1,8 +1,9 @@
-import {inject, Injectable, signal, WritableSignal} from '@angular/core';
-import {HttpClient} from '@angular/common/http'
-import {BehaviorSubject, catchError, map, Observable, of, tap} from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 
-import {Profile} from '../interfaces/profile.interface';
+import { IUpdateProfile, IProfile } from '../interfaces/profile.interface';
+import { processImage } from '../../helpers/utils/processImage';
 
 
 @Injectable({
@@ -12,21 +13,29 @@ export class ProfileService {
   http: HttpClient = inject(HttpClient)
   baseApiUrl: string = 'http://localhost:5001/api/'
 
-  private followingSubject: BehaviorSubject<Profile[]> = new BehaviorSubject<Profile[]>([]);
-  public following$: Observable<Profile[]> = this.followingSubject.asObservable();
+  private followingSubject: BehaviorSubject<IProfile[]> = new BehaviorSubject<IProfile[]>([]);
+  public following$: Observable<IProfile[]> = this.followingSubject.asObservable();
 
 
-  getProfiles(): Observable<Profile[]> {
-    return this.http.get<Profile[]>(`${this.baseApiUrl}persons`)
+  getProfiles(): Observable<IProfile[] | { error: string }> {
+    return this.http.get<IProfile[]>(`${this.baseApiUrl}persons`)
   }
 
-  searchProfiles(person: string): Observable<Profile[]> {
-    return this.http.get<Profile[]>(`${this.baseApiUrl}persons/search`, {
+  getMyProfile(): Observable<IProfile | null> {
+    return this.http.get<IProfile>(`${this.baseApiUrl}persons/me`)
+  }
+
+  getPerson(id: string): Observable<IProfile> {
+    return this.http.get<IProfile>(`${this.baseApiUrl}persons/${id}`)
+  }
+
+  searchProfiles(person: string): Observable<IProfile[]> {
+    return this.http.get<IProfile[]>(`${this.baseApiUrl}persons/search`, {
       params: { person },
     });
   }
 
-  followPerson(followed: Profile): Observable<null> {
+  followPerson(followed: IProfile): Observable<null> {
     return this.http.post<any>(`${this.baseApiUrl}persons/${followed.id}/follow`, {}).pipe(
       tap((): void => {
         this.updateFollowingList(followed, 'follow');
@@ -37,8 +46,8 @@ export class ProfileService {
     );
   }
 
-  unfollowPerson(followed: Profile): Observable<null> {
-    const {id} = followed
+  unfollowPerson(followed: IProfile): Observable<null> {
+    const { id} = followed
     return this.http.post<any>(`${this.baseApiUrl}persons/${id}/unfollow`, {}).pipe(
       tap((): void => {
         this.updateFollowingList(followed, 'unfollow');
@@ -49,17 +58,9 @@ export class ProfileService {
     );
   }
 
-  getPerson(id: string): Observable<Profile> {
-    return this.http.get<Profile>(`${this.baseApiUrl}persons/${id}`)
-  }
-
-  getMyProfile(): Observable<Profile | null> {
-    return this.http.get<Profile>(`${this.baseApiUrl}persons/me`)
-  }
-
-  getFollowing(userId: string): Observable<Profile[]> {
-    return this.http.get<Profile[]>(`${this.baseApiUrl}persons/${userId}/following/`).pipe(
-      tap((followingProfiles: Profile[]): void => {
+  getFollowing(userId: string): Observable<IProfile[]> {
+    return this.http.get<IProfile[]>(`${this.baseApiUrl}persons/${userId}/following/`).pipe(
+      tap((followingProfiles: IProfile[]): void => {
         this.followingSubject.next(followingProfiles);
       }),
       catchError(() => {
@@ -69,24 +70,36 @@ export class ProfileService {
   }
 
   getFollowingId(userId: string): Observable<number[]> {
-    return this.http.get<Profile[]>(`${this.baseApiUrl}persons/${userId}/following/`).pipe(
-      map((profiles: Profile[]) => profiles.map(profile => profile.id)),
+    return this.http.get<IProfile[]>(`${this.baseApiUrl}persons/${userId}/following/`).pipe(
+      map((profiles: IProfile[]) => profiles.map(profile => profile.id)),
     );
   }
 
-  updateFollowingList(followedPerson: Profile, action: 'follow' | 'unfollow') {
-    const currentFollowing: Profile[] = this.followingSubject.getValue();
-    let updatedFollowing: Profile[];
+  updateFollowingList(followedPerson: IProfile, action: 'follow' | 'unfollow') {
+    const currentFollowing: IProfile[] = this.followingSubject.getValue();
+    let updatedFollowing: IProfile[];
     if (action === 'follow') {
-      updatedFollowing = [...currentFollowing, followedPerson as Profile];
+      updatedFollowing = [...currentFollowing, followedPerson as IProfile];
     } else {
-      updatedFollowing = currentFollowing.filter((profile: Profile): boolean => profile.id !== followedPerson.id);
+      updatedFollowing = currentFollowing.filter((profile: IProfile): boolean =>
+        profile.id !== followedPerson.id);
     }
     this.followingSubject.next(updatedFollowing);
   }
 
-  updateProfile(data: Partial<Profile>): Observable<Profile> {
-    return this.http.patch<Profile>(`${this.baseApiUrl}persons/me`, data);
+  updateProfile(data: Partial<IUpdateProfile>): Observable<IUpdateProfile> {
+    if (data.image) {
+      return this.processImageAndUpdateProfile(data.image, data);
+    } else {
+      return this.sendUpdateRequest(data);
+    }
   }
 
+  processImageAndUpdateProfile(profilePhoto: File, jsonPayload: Partial<IUpdateProfile>): Observable<IUpdateProfile> {
+    return processImage(profilePhoto, jsonPayload, (payload) => this.sendUpdateRequest(payload));
+  }
+
+  sendUpdateRequest(jsonPayload: Partial<IUpdateProfile>): Observable<IUpdateProfile> {
+    return this.http.patch<IUpdateProfile>(`${this.baseApiUrl}persons/me`, jsonPayload);
+  }
 }

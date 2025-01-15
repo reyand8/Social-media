@@ -30,3 +30,20 @@
   max-width: 195px;
   width: 100%;
 }
+
+.profile-image-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .file-input {
+    display: none;
+  }
+}

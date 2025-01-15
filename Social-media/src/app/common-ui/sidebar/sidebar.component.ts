@@ -5,7 +5,7 @@ import {catchError, Observable, of, switchMap} from 'rxjs';
 
 import { SubscriberCardComponent } from './following-card/following-card.component';
 import { ProfileService } from '../../data/services/profile.service';
-import { Profile } from '../../data/interfaces/profile.interface';
+import { IProfile } from '../../data/interfaces/profile.interface';
 import {ImgUrlPipe} from '../../helpers/pipes/img-url.pipe';
 import { AuthService } from '../../auth/auth.service';
 import { SvgComponent } from '../svg/svg.component';
@@ -23,8 +23,8 @@ export class SidebarComponent {
   profileService: ProfileService = inject(ProfileService)
   authService: AuthService = inject(AuthService)
 
-  profile: Profile | null = null;
-  following$: Observable<Profile[]> = this.profileService.following$;
+  profile: IProfile | null = null;
+  following$: Observable<IProfile[]> = this.profileService.following$;
 
   menuItems: {label: string, icon: string, link: string}[] = [
     {label: 'Home', icon: 'home', link: ''},
@@ -36,7 +36,7 @@ export class SidebarComponent {
 
   ngOnInit(): void {
     this.profileService.getMyProfile().pipe(
-      switchMap((profile: Profile | null) => {
+      switchMap((profile: IProfile | null) => {
         if (profile) {
           this.profile = profile;
           return this.profileService.getFollowing(String(profile.id));

@@ -1,6 +1,18 @@
 <div class="profile-card__wrapper mt32">
-  @for (profile of profiles$ | async ; track profile.id) {
-    <app-profile-card [myProfile$]="myProfile$" [followingIds]="followingIds"  [profile] = "profile">
-    </app-profile-card>
-  }
+  <ng-container *ngIf="profiles$ | async as profiles; else fetchingError">
+    <ng-container *ngIf="profiles.length; else noProfiles">
+      <app-profile-card
+        *ngFor="let profile of profiles; trackBy: trackById"
+        [myProfile$]="myProfile$"
+        [followingIds]="followingIds"
+        [profile]="profile">
+      </app-profile-card>
+    </ng-container>
+    <ng-template #noProfiles>
+      <p>No profiles found or an error occurred.</p>
+    </ng-template>
+  </ng-container>
+  <ng-template #fetchingError>
+    <p>Error occurred while fetching profiles.</p>
+  </ng-template>
 </div>

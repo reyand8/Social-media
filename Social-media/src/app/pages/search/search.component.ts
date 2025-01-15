@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, filter, Observable, switchMap} from
 
 import {ProfileCardComponent} from '../../common-ui/profile-card/profile-card.component';
 import {ProfileService} from '../../data/services/profile.service';
-import {Profile} from '../../data/interfaces/profile.interface';
+import {IProfile} from '../../data/interfaces/profile.interface';
 
 
 @Component({
@@ -22,8 +22,8 @@ export class SearchComponent {
       search: new FormControl(''),
   });
 
-  filteredProfiles$: Observable<Profile[]>;
-  myProfile$: Observable<null | Profile> = this.profileService.getMyProfile();
+  filteredProfiles$: Observable<IProfile[]>;
+  myProfile$: Observable<null | IProfile> = this.profileService.getMyProfile();
   followingIds: number[] = [];
 
   constructor() {
@@ -38,9 +38,9 @@ export class SearchComponent {
       )
     );
 
-    this.myProfile$.subscribe((profile: Profile | null) => {
+    this.myProfile$.subscribe((profile: IProfile | null): void => {
       if (profile) {
-        this.profileService.getFollowingId(String(profile.id)).subscribe((ids) => {
+        this.profileService.getFollowingId(String(profile.id)).subscribe((ids: number[]): void => {
           this.followingIds = ids.map(id => Number(id));
         });
       }
