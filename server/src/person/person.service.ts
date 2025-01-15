@@ -1,9 +1,9 @@
 import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
-import { Person } from '@prisma/client';
+import {Person} from '@prisma/client';
 
-import { PrismaService } from '../prisma.service';
-import { CreatePersonDto } from './dto/createPerson.dto';
-import { UpdatePersonDto } from './dto/updatePerson.dto';
+import {PrismaService} from '../prisma.service';
+import {CreatePersonDto} from './dto/createPerson.dto';
+import {UpdatePersonDto} from './dto/updatePerson.dto';
 
 
 type PublicPerson = Omit<Person, 'password'>;
@@ -25,24 +25,32 @@ export class PersonService {
 		};
 	}
 
-	async findAll(
-		take?: number,
-		skip?: number,
-	): Promise<PublicPerson[]> {
+	async findAll(take?: number, skip?: number): Promise<PublicPerson[] | { error: string }> {
 		const DEFAULT_TAKE: 100 = 100;
 		const DEFAULT_SKIP: 0 = 0;
 		if(!take || !skip) {
 			take = DEFAULT_TAKE;
 			skip = DEFAULT_SKIP;
 		}
-		return this.prisma.person.findMany({
-			skip,
-			take,
-			select: this.publicPersonSelect,
-		});
+		try {
+			const persons = await this.prisma.person.findMany({
+				skip,
+				take,
+				select: this.publicPersonSelect,
+			});
+			if (persons.length === 0) {
+				return [];
+			}
+			return persons;
+		} catch (error) {
+			return { error: `An error occurred while fetching persons` };
+		}
 	}
 
 	async findBySearchString(searchString?: string): Promise<Person[]> {
+		if (!searchString) {
+			return [];
+		}
 		return this.prisma.person.findMany({
 			where: {
 				OR: [
@@ -64,6 +72,9 @@ export class PersonService {
 	}
 
 	async followPerson(followerId: number, followedId: number): Promise<void> {
+		if (followedId === followerId) {
+			throw new BadRequestException('You can not follow yourself');
+		}
 		const existingFollow = await this.prisma.follower.findUnique({
 			where: {
 				followerId_followedId: {
@@ -73,7 +84,7 @@ export class PersonService {
 			}
 		});
 		if (existingFollow) {
-			throw new Error('You are already following this user');
+			throw new BadRequestException('You are already following this user');
 		}
 		await this.prisma.follower.create({
 			data: {
@@ -84,6 +95,9 @@ export class PersonService {
 	}
 
 	async unfollowPerson(followerId: number, followedId: number): Promise<void> {
+		if (followedId === followerId) {
+			throw new BadRequestException('You cannot unfollow yourself');
+		}
 		const existingFollow = await this.prisma.follower.findUnique({
 			where: {
 				followerId_followedId: {
@@ -93,7 +107,7 @@ export class PersonService {
 			}
 		});
 		if (!existingFollow) {
-			throw new NotFoundException('You are not following this user');
+			throw new BadRequestException('You are not following this user');
 		}
 		await this.prisma.follower.delete({
 			where: {
@@ -103,6 +117,37 @@ export class PersonService {
 				}
 			}
 		});
+	}
+
+	async getFollowing(userId: number): Promise<PublicPerson[]> {
+		if (isNaN(userId)) {
+			throw new BadRequestException('Invalid userId');
+		}
+		const following = await this.prisma.follower.findMany({
+			where: {
+				followerId: userId,
+			},
+			include: {
+				followed: {
+					select: this.publicPersonSelect,
+				},
+			},
+		});
+		return following.map((f) => f.followed);
+	}
+
+	async findByUsername(username: string): Promise<PublicPerson | boolean> {
+		if (!username) {
+			throw new BadRequestException('Invalid username');
+		}
+		const person: PublicPerson = await this.prisma.person.findUnique({
+			where: { username },
+			select: this.publicPersonSelect,
+		});
+		if (!person) {
+			return false;
+		}
+		return person;
 	}
 
 	async findById(personId: number): Promise<PublicPerson> {
@@ -120,39 +165,10 @@ export class PersonService {
 		return person;
 	}
 
-	async findByUsername(username: string): Promise<PublicPerson | boolean> {
-		const person: PublicPerson = await this.prisma.person.findUnique({
-			where: { username },
-			select: this.publicPersonSelect,
-		});
-		if (!person) {
-		  return false;
-		}
-		return person;
-	}
-
 	async findByUsernameForValidation(username: string): Promise<Person | null> {
-		const person: Person = await this.prisma.person.findUnique({
-			where: {username},
+		return this.prisma.person.findUnique({
+			where: {username}
 		});
-		if (!person) {
-			return null;
-		}
-		return person;
-	}
-
-	async getFollowing(userId: number): Promise<PublicPerson[]> {
-		const following = await this.prisma.follower.findMany({
-			where: {
-				followerId: userId,
-			},
-			include: {
-				followed: {
-					select: this.publicPersonSelect,
-				},
-			},
-		});
-		return following.map((f) => f.followed);
 	}
 
 	async create(createPersonDto: CreatePersonDto): Promise<Person> {
@@ -162,16 +178,18 @@ export class PersonService {
 	}
 
 	async update(id: number, updatePersonDto: UpdatePersonDto): Promise<Person> {
-		const person: Person = await this.prisma.person.findUnique({ where: { id }});
-		if (!person)
+		const person = await this.prisma.person.findUnique({ where: { id }});
+		if (!person) {
 			throw new NotFoundException(`Person with id: ${id} not found`);
+		}
 		return this.prisma.person.update({ where: { id }, data: updatePersonDto });
 	}
 
 	async remove(id: number): Promise<void> {
-		const person: Person =
-			await this.prisma.person.findUnique({ where: { id } });
-		if (!person) throw new NotFoundException(`Person with id: ${id} not found`);
+		const person= await this.prisma.person.findUnique({ where: { id } });
+		if (!person) {
+			throw new NotFoundException(`Person with id: ${id} not found`);
+		}
 		await this.prisma.person.delete({ where: { id } });
 	}
 }

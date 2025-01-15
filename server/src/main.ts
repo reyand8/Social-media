@@ -18,8 +18,8 @@ async function bootstrap(): Promise<void> {
   app.enableCors();
   app.enableShutdownHooks()
 
-  app.use(bodyParser.json({ limit: '5mb' }));  // Увеличьте limit до необходимого размера
-  app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+  app.use(bodyParser.json({ limit: '10mb' }));
+  app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
   await app.listen(PORT, (): void => {
     Logger.log(`http://localhost:${PORT}`, `Server starts on host`);

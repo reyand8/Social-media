@@ -3,4 +3,5 @@ export class UpdatePersonDto {
 	lastName?: string;
 	description?: string;
 	hobby?: string[];
+	image?: string;
 }

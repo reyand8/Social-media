@@ -4,8 +4,9 @@ import { Person } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { PersonService } from '../person/person.service';
-import {IPerson} from '../person.interface';
 import {ICreatePersonDto, ITokens, IUser} from './auth.interface';
+
+type PublicPerson = Omit<Person, 'password'>;
 
 
 @Injectable()
@@ -38,7 +39,7 @@ export class AuthService {
     }
 
     private async usernameExists(username: string): Promise<boolean> {
-        const existingUser: IPerson | boolean = await this.personService.findByUsername(username);
+        const existingUser: PublicPerson | boolean = await this.personService.findByUsername(username);
         return !!existingUser;
     }
 
