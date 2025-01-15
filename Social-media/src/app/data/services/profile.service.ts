@@ -29,6 +29,10 @@ export class ProfileService {
     return this.http.get<IProfile>(`${this.baseApiUrl}persons/${id}`)
   }
 
+  removeMyProfile(): Observable<void> {
+    return this.http.delete<void>(`${this.baseApiUrl}persons/me`)
+  }
+
   searchProfiles(person: string): Observable<IProfile[]> {
     return this.http.get<IProfile[]>(`${this.baseApiUrl}persons/search`, {
       params: { person },

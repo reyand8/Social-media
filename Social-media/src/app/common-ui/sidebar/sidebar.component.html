@@ -1,5 +1,5 @@
-<img src="/assets/img/icon.png" alt="logo" class="sidebar-logo ml16 mb20">
-<div class="sidebar__header" *ngIf="profile">
+<img [routerLink]="['']" src="/assets/img/icon.png" alt="logo" class="sidebar-logo ml16 mb20">
+<div class="sidebar__header" *ngIf="profile" [routerLink]="['profile']" >
     <img class="profile-image" [src]="profile.image | imgUrl" [alt]="profile.lastName">
     <div class="profile-username">
       {{ profile.username }}
@@ -9,7 +9,9 @@
 <nav>
   <ul class="main-menu-list">
     <li *ngFor="let menuItem of menuItems">
-      <button class="menu-item" [routerLink]="[menuItem.link]" (click)="menuItem.label === 'Logout' ? onLogout() : null">
+      <button class="menu-item"
+              [routerLink]="[menuItem.link]"
+              (click)="menuItem.label === 'Logout' ? onLogout() : null">
         <svg [icon]="menuItem.icon" class="menu-item-svg"></svg>
         <span>{{ menuItem.label }}</span>
       </button>

@@ -6,14 +6,21 @@
   width: 100%;
   margin-bottom: 120px;
 }
+
+.my-profile-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
 .my-profile-form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .my-profile-input {
   width: 490px;
-
 }
 
 .my-profile-successfully {
@@ -46,4 +53,25 @@
   .file-input {
     display: none;
   }
+}
+
+.my-profile-delete {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 156px;
+  background: var(--error-color);
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin-top: 18px;
+
+  p {
+    color: var(--main-light-color);
+    font-weight: 800;
+    font-size: 12px;
+    line-height: 24px;
+    padding-left: 6px;
+  }
+
 }

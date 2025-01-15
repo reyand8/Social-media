@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { ProfileService } from '../../data/services/profile.service';
 import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
 import {IMyProfile, IMyProfileForm} from './profile.interface';
+import {Router} from "@angular/router";
+import {SvgComponent} from "../../common-ui/svg/svg.component";
 
 
 @Component({
@@ -16,13 +18,15 @@ import {IMyProfile, IMyProfileForm} from './profile.interface';
     AsyncPipe,
     NgIf,
     ImgUrlPipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SvgComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
   profileService: ProfileService = inject(ProfileService);
+  router: Router = inject(Router);
   myProfile$: Observable<any> = this.profileService.getMyProfile();
   isSuccessfully: WritableSignal<boolean> = signal<boolean>(false);
   imagePreview: string | null = null;
@@ -40,7 +44,7 @@ export class ProfileComponent {
   }
 
   triggerFileInput(): void {
-    const fileInput = document.querySelector<HTMLInputElement>('.file-input');
+    const fileInput: HTMLInputElement | null = document.querySelector<HTMLInputElement>('.file-input');
     if (fileInput) {
       fileInput.click();
     }
@@ -113,5 +117,16 @@ export class ProfileComponent {
         },
       });
     }
+  }
+
+  removeMyProfile() {
+    this.profileService.removeMyProfile().subscribe({
+      next: (): void => {
+        this.router.navigate(['/login']);
+      },
+      error: (err): void => {
+        console.error('Error removing profile:', err);
+      }
+    });
   }
 }

@@ -1,59 +1,65 @@
 <div class="my-profile mt60" *ngIf="myProfile$ | async as profile; else loading">
   <h1 class="h1 mb60">My Profile</h1>
-  <form class="my-profile-form" [formGroup]="form" (ngSubmit)="saveChanges()">
-    <div class="profile-image-wrapper">
-      <img *ngIf="imagePreview; else imageProfile" [src]="imagePreview" alt="Profile Photo" class="profile-image" (click)="triggerFileInput()" />
-      <ng-template #imageProfile>
-        <img
-          class="profile-image"
-          [src]="profile.image | imgUrl"
-          [alt]="profile?.lastName"
-          (click)="triggerFileInput()"
+  <div class="my-profile-main">
+    <form class="my-profile-form" [formGroup]="form" (ngSubmit)="saveChanges()">
+      <div class="profile-image-wrapper">
+        <img *ngIf="imagePreview; else imageProfile" [src]="imagePreview" alt="Profile Photo" class="profile-image" (click)="triggerFileInput()" />
+        <ng-template #imageProfile>
+          <img
+            class="profile-image"
+            [src]="profile.image | imgUrl"
+            [alt]="profile?.lastName"
+            (click)="triggerFileInput()"
+          />
+        </ng-template>
+        <input
+          type="file"
+          accept="image/*"
+          class="file-input"
+          (change)="onImageSelected($event)"
+          style="display: none"
         />
-      </ng-template>
-      <input
-        type="file"
-        accept="image/*"
-        class="file-input"
-        (change)="onImageSelected($event)"
-        style="display: none"
-      />
-    </div>
+      </div>
 
 
 
-    <label for="firstName" class="control-label">
-      First Name
-      <input id="firstName" formControlName="firstName" class="control-input my-profile-input mb16" type="text">
-    </label>
+      <label for="firstName" class="control-label">
+        First Name
+        <input id="firstName" formControlName="firstName" class="control-input my-profile-input mb16" type="text">
+      </label>
 
-    <label for="lastName" class="control-label">
-      Last Name
-      <input id="lastName" formControlName="lastName" class="control-input my-profile-input mb16" type="text">
-    </label>
+      <label for="lastName" class="control-label">
+        Last Name
+        <input id="lastName" formControlName="lastName" class="control-input my-profile-input mb16" type="text">
+      </label>
 
-    <label for="description" class="control-label">
-      Description
-      <textarea id="description" formControlName="description" rows="2"
-                class="control-input my-profile-input control-input--description mb16">
+      <label for="description" class="control-label">
+        Description
+        <textarea id="description" formControlName="description" rows="2"
+                  class="control-input my-profile-input control-input--description mb16">
       </textarea>
-    </label>
+      </label>
 
-    <label class="control-label">
-      Hobbies
-      <div class="hobby-wrapper my-profile-input">
+      <label class="control-label">
+        Hobbies
+        <div class="hobby-wrapper my-profile-input">
         <span *ngFor="let hob of hobby.controls; let i = index" class="hobby">
           {{ hob.value }}
           <button type="button" class="btn-remove-hobby" (click)="removeHobby(i)">Х</button>
         </span>
-      </div>
-      <input #hobbyInput class="control-input control-input--hobby my-profile-input" type="text" placeholder="Add a hobby">
-      <button type="button" class="btn-add-hobby" (click)="addHobby(hobbyInput)">Add</button>
-    </label>
-    <p class="my-profile-successfully" *ngIf="isSuccessfully()">Your profile was updated</p>
-    <p class="my-profile-invalid" *ngIf="getFormError()">Invalid data</p>
-    <button type="submit" [disabled]="form.invalid" class="btn-shadow btn">Save Changes</button>
-  </form>
+        </div>
+        <input #hobbyInput class="control-input control-input--hobby my-profile-input" type="text" placeholder="Add a hobby">
+        <button type="button" class="btn-add-hobby" (click)="addHobby(hobbyInput)">Add</button>
+      </label>
+      <p class="my-profile-successfully" *ngIf="isSuccessfully()">Your profile was updated</p>
+      <p class="my-profile-invalid" *ngIf="getFormError()">Invalid data</p>
+      <button type="submit" [disabled]="form.invalid" class="btn-shadow btn">Save Changes</button>
+    </form>
+    <div (click)="removeMyProfile()" class="my-profile-delete">
+      <img src="assets/img/svg/trash.svg" alt="">
+      <p>Delete Account</p>
+    </div>
+  </div>
 </div>
 
 <ng-template #loading>

@@ -100,6 +100,9 @@ export class PersonController {
 	@Delete('me')
 	@UseGuards(JwtAuthGuard)
 	async remove(@Request() req: any): Promise<void> {
-		return this.personService.remove(req.user.id);
+		if (!req.user.sub) {
+			throw new Error('Unknown user')
+		}
+		return this.personService.remove(req.user.sub);
 	}
 }

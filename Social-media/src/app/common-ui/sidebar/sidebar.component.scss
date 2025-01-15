@@ -5,6 +5,7 @@
 
 .sidebar-logo {
   width: 124px;
+  cursor: pointer;
 }
 
 .sidebar__header {
@@ -13,6 +14,7 @@
   grid-template-columns: 32px 1fr 16px;
   grid-gap: 12px;
   align-items: center;
+  cursor: pointer;
 
   .profile-username {
     display: flex;
