@@ -92,7 +92,7 @@ export class ProfileService {
   }
 
   updateProfile(data: Partial<IUpdateProfile>): Observable<IUpdateProfile> {
-    if (data.image) {
+    if (data.image && typeof data.image !== 'string') {
       return this.processImageAndUpdateProfile(data.image, data);
     } else {
       return this.sendUpdateRequest(data);

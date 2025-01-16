@@ -106,7 +106,11 @@ export class ProfileComponent {
 
   saveChanges(): void {
     if (this.form.valid) {
-      const updatedProfile = this.form.value as Required<IMyProfile>;
+      const updatedProfile: Required<IMyProfile> =
+        { ...this.form.value } as Required<IMyProfile>;
+      if (typeof updatedProfile.image === 'string') {
+        delete updatedProfile.image;
+      }
       this.profileService.updateProfile(updatedProfile).subscribe({
         next: (profile: IMyProfile): void => {
           this.isSuccessfully.set(true);

@@ -145,8 +145,6 @@ export class PersonController {
 	async update(@Body() updatePersonDto: UpdatePersonDto, @Request() req: any): Promise<Person> {
 		if (updatePersonDto.image) {
 			updatePersonDto.image = saveImageFromBase64(updatePersonDto.image)
-		} else {
-			updatePersonDto.image = '/uploads/people/default.png';
 		}
 		return this.personService.update(req.user.sub, updatePersonDto);
 	}

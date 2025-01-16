@@ -11,7 +11,7 @@ export interface IProfile {
 export interface IUpdateProfile {
   id: number,
   username: string,
-  image: File | null,
+  image: File | string | null,
   firstName: string,
   lastName: string,
   description: string,
