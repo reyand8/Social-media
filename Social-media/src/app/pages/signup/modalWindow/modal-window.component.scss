@@ -48,3 +48,25 @@
   flex-direction: column;
   margin: 12px 0 20px 0;
 }
+
+.photo-input-hidden {
+  display: none;
+}
+
+.custom-button {
+  background-color: var(--main-light-color);
+  color: var(--dark-color);
+  padding: 6px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+  max-width: 150px;
+  width: 100%;
+}
+
+.custom-button:hover {
+  background-color: var(--dark-color);
+  color: var(--main-light-color);
+}

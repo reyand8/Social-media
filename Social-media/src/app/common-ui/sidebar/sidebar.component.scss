@@ -81,7 +81,7 @@
 
 .following-list {
   overflow-y: auto;
-  height: 220px;
+  max-height: 220px;
 }
 
 .following-list__empty {
