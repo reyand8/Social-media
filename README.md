@@ -98,7 +98,7 @@ ____
 
 ![register1.png](readmeScr/register1.png)
 
-![register2.png](readmeScr/register2.png)
+![register2.png](readmeScr/register3.png)
 ____
 ____
 
@@ -120,4 +120,4 @@ ____
 
 ![profile1.png](readmeScr/profile1.png)
 
-![profile2.png](readmeScr/profile2.png)
+![profile3.png](readmeScr/profile3.png)
