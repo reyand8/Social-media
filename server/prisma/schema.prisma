@@ -8,17 +8,21 @@ datasource db {
 }
 
 model Person {
-  id          Int        @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   firstName   String
   lastName    String
-  username    String     @unique
+  username    String   @unique
   description String
   hobby       String[]
   image       String
-  createdAt   DateTime   @default(now()) @map("created_at")
+  createdAt   DateTime @default(now()) @map("created_at")
   password    String
-  following   Follower[] @relation("FollowingRelation")
-  followers   Follower[] @relation("FollowerRelation")
+
+  following Follower[] @relation("FollowingRelation")
+  followers Follower[] @relation("FollowerRelation")
+
+  sentMessages     Message[] @relation("SenderMessages")
+  receivedMessages Message[] @relation("ReceiverMessages")
 }
 
 model Follower {
@@ -30,4 +34,18 @@ model Follower {
   followed   Person   @relation("FollowerRelation", fields: [followedId], references: [id])
 
   @@unique([followerId, followedId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  text       String
+  senderId   Int
+  receiverId Int
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  sender   Person @relation("SenderMessages", fields: [senderId], references: [id])
+  receiver Person @relation("ReceiverMessages", fields: [receiverId], references: [id])
+
+  @@index([senderId, receiverId])
 }
