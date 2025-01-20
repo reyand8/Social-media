@@ -13,7 +13,7 @@ ____
 ## 📜 Main Information
 
 The Social-media application allows you to create an account, 
-follow other users, and send them messages.
+follow other users and send them messages.
 
 
 ### 1. Registration Page
@@ -31,10 +31,22 @@ The Home Page displays a list of all users. For each user, you can:
 - View their personal information.
 - Choose to follow them.
 
-### 4. Search Page
+### 4. Chat Page
+The Chat Page displays a list of chats. You can:
+- Select a chat to message a specific user.
+- Open a user's profile to view their details.
+
+### 5. Messenger Page
+The Messenger Page allows you to communicate with other users. 
+Features include:
+- Sending messages.
+- Editing previously sent messages.
+- Deleting messages.
+
+### 6. Search Page
 Use the Search Page to find users by their username or description.
 
-### 5. Profile Page
+### 7. Profile Page
 Manage your account on the Profile Page. You can:
 - Edit your personal information.
 - Update your profile photo.
@@ -105,6 +117,28 @@ ____
 ### Home
 
 ![home.png](readmeScr/home.png)
+
+____
+____
+
+### Chats
+
+![chats.png](readmeScr/chats.png)
+
+____
+____
+
+### Chat
+
+![chat.png](readmeScr/chat.png)
+
+![messages-actions.png](readmeScr/messages-actions.png)
+____
+____
+
+### User Info
+
+![user-info.png](readmeScr/user-info.png)
 
 ____
 ____
