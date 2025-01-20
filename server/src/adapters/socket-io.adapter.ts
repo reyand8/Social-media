@@ -1,12 +1,10 @@
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { Injectable } from '@nestjs/common';
 
-import { ServerOptions } from 'socket.io';
+import { Server } from 'socket.io';
 
 
-@Injectable()
 export class SocketIoAdapter extends IoAdapter {
-    createIOServer(port: number, options?: ServerOptions): any {
+    createIOServer(port: number, options?: any): Server {
         return super.createIOServer(port, options);
     }
 }

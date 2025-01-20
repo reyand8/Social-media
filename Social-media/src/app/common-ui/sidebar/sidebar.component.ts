@@ -39,6 +39,9 @@ export class SidebarComponent {
       switchMap((profile: IProfile | null) => {
         if (profile) {
           this.profile = profile;
+          const userData: { userId: number; username: string } =
+            { userId: profile.id, username: profile.username };
+          localStorage.setItem('userData', JSON.stringify(userData));
           return this.profileService.getFollowing(String(profile.id));
         } else {
           return of([]);

@@ -2,6 +2,7 @@ import {Module, OnModuleInit} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { path } from 'app-root-path';
+import { ServerOptions } from 'socket.io';
 
 import { PrismaService } from './prisma.service';
 import { PersonModule } from './person/person.module';
@@ -35,11 +36,22 @@ export class AppModule implements OnModuleInit {
   constructor(private socketService: SocketService) {}
 
   onModuleInit(): void {
-    const server = new SocketIoAdapter().createIOServer(3001);
+    const options: any = {
+      cors: {
+        origin: 'http://localhost:4200',
+        methods: ['GET', 'POST', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
+      },
+    };
+
+    const server =
+        new SocketIoAdapter().createIOServer(3001, options);
     this.socketService.setServer(server);
 
-    server.on('connection', (socket): void  => {
+    server.on('connection', (socket): void => {
       this.socketService.onConnection(socket);
     });
   }
+
 }

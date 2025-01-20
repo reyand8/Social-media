@@ -14,7 +14,7 @@
     <div *ngIf="message.senderId !== +receiverId">
       <app-my-message
         (clickDeleteMessage)="deleteMessage($event)"
-        (clickEditMessage)="editMessage($event)"
+        (clickEditMessage)="editMessageContent($event)"
         [message]="message"></app-my-message>
     </div>
     <div *ngIf="message.senderId === +receiverId">
