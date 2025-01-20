@@ -1,0 +1,58 @@
+:host {
+  margin: 10px;
+}
+
+.my-message__date {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--main-light-color);
+  padding: 1rem;
+}
+
+.my-message__wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.my-message__content {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.my-message__group {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  position: relative;
+}
+
+.my-message__text {
+  background-color: var(--my-message-color);
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  max-width: 20rem;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.my-message__delete-button,
+.my-message__edit-button {
+  display: none;
+  margin: 0 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: var(--gray-color);
+  cursor: pointer;
+}
+
+.my-message__group:hover .my-message__delete-button,
+.my-message__group:hover .my-message__edit-button {
+  display: block;
+}

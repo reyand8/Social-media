@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 
 import { IUpdateProfile, IProfile } from '../interfaces/profile.interface';
 import { processImage } from '../../helpers/utils/processImage';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,7 @@ import { processImage } from '../../helpers/utils/processImage';
 })
 export class ProfileService {
   http: HttpClient = inject(HttpClient)
-  baseApiUrl: string = 'http://localhost:5001/api/'
+  baseApiUrl: string = environment.baseApiUrl;
 
   private followingSubject: BehaviorSubject<IProfile[]> = new BehaviorSubject<IProfile[]>([]);
   public following$: Observable<IProfile[]> = this.followingSubject.asObservable();
@@ -26,7 +27,7 @@ export class ProfileService {
   }
 
   getPerson(id: string): Observable<IProfile> {
-    return this.http.get<IProfile>(`${this.baseApiUrl}persons/${id}`)
+    return this.http.get<IProfile>(`${this.baseApiUrl}persons/${id}/find`)
   }
 
   removeMyProfile(): Observable<void> {

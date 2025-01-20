@@ -5,7 +5,8 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
 import { ISignupPayload, ISignup, ITokenResponse } from './auth.interface';
-import {processImage} from '../helpers/utils/processImage';
+import { processImage } from '../helpers/utils/processImage';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class AuthService {
   http: HttpClient = inject(HttpClient);
   router: Router = inject(Router)
   cookieService: CookieService = inject(CookieService)
-  baseApiUrl: string = 'http://localhost:5001/api/auth/';
+  baseApiUrl: string = environment.baseApiUrl;
   token: string | null = null;
   refreshToken: string | null = null;
 
@@ -52,7 +53,7 @@ export class AuthService {
   }
 
   sendSignupRequest(jsonPayload: ISignupPayload): Observable<ITokenResponse> {
-    return this.http.post<ITokenResponse>(`${this.baseApiUrl}register`, jsonPayload).pipe(
+    return this.http.post<ITokenResponse>(`${this.baseApiUrl}auth/register`, jsonPayload).pipe(
       tap((val: ITokenResponse) => this.saveTokens(val)),
       catchError((err) => {
         return throwError(() => err);
@@ -61,7 +62,7 @@ export class AuthService {
   }
 
   login(payload: {username: string, password: string}): Observable<ITokenResponse> {
-    return this.http.post<ITokenResponse>(`${this.baseApiUrl}login`, payload).pipe(
+    return this.http.post<ITokenResponse>(`${this.baseApiUrl}auth/login`, payload).pipe(
       tap((val: ITokenResponse): void => {
         this.saveTokens(val);
       }),
@@ -79,6 +80,7 @@ export class AuthService {
   }
 
   saveTokens(res: ITokenResponse): void {
+    console.log(res.access_token)
     this.token =  res.access_token
     this.refreshToken = res.refresh_token
     this.cookieService.set('token', this.token)
@@ -86,7 +88,7 @@ export class AuthService {
   }
 
   refreshAuthToken(): Observable<ITokenResponse> {
-    return this.http.post<ITokenResponse>(`${this.baseApiUrl}token`, {
+    return this.http.post<ITokenResponse>(`${this.baseApiUrl}auth/token`, {
       refresh_token: this.refreshToken,
     }).pipe(
       tap((res: ITokenResponse): void => {

@@ -1,0 +1,25 @@
+<div *ngIf="receiver;" class="chat-card">
+  <div class="avatar-name">
+    <img [src]="receiver.image | imgUrl" alt="avatar" class="chat-card__avatar">
+    <div class="chat-card__name">
+      <strong class="h6">{{ receiver.firstName }} {{ receiver.lastName }}</strong>
+    </div>
+  </div>
+  <div></div>
+  <div class="chat-card__btns">
+    <div class="chat-card__btn" [routerLink]="['/messenger', receiver.id]">
+      <img src="assets/img/svg/send.svg" alt="send">
+    </div>
+    <div class="chat-card__btn" (click)="onOpenFriendInfo()">
+      <img src="assets/img/svg/info.svg" alt="info">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="openFriendInfo() && receiver">
+  <app-friend-info
+    [receiver]="receiver"
+    (closeFriendInfoEvent)="onCloseFriendInfo()"
+  ></app-friend-info>
+</div>
+<div class="modal-overlay" *ngIf="openFriendInfo()"></div>

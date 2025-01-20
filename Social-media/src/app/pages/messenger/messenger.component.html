@@ -1,0 +1,48 @@
+<div class="messenger_header">
+  <div *ngIf="receiver" class="messenger_header__info">
+    <img [src]="receiver.image | imgUrl" alt="{{receiver.username}}" class="messenger_header__img">
+    <p class="messenger_header__name">{{ receiver.firstName }} {{ receiver.lastName }}</p>
+  </div>
+  <div class="messenger_header__btns">
+    <div class="messenger_header__btn" (click)="onOpenFriendInfo()">
+      <img src="assets/img/svg/info.svg" alt="info">
+    </div>
+  </div>
+</div>
+<div class="messenger_content">
+  <div *ngFor="let message of messages">
+    <div *ngIf="message.senderId !== +receiverId">
+      <app-my-message
+        (clickDeleteMessage)="deleteMessage($event)"
+        (clickEditMessage)="editMessage($event)"
+        [message]="message"></app-my-message>
+    </div>
+    <div *ngIf="message.senderId === +receiverId">
+      <app-friend-message [message]="message"></app-friend-message>
+    </div>
+  </div>
+</div>
+<div class="messenger_footer">
+  <div class="messenger_footer__add" type="button">
+    <input type="file" id="file-input" style="display: none;">
+    <img src="assets/img/svg/addImage.svg" alt="Attach">
+  </div>
+  <input
+        #inputRef
+        [value]="newMessage()"
+        (input)="newMessage.set(inputRef.value)"
+        class="messenger_footer__input"
+        type="text"
+        placeholder="Type a message">
+  <button (click)="sendMessage()" class="messenger_footer__btn" type="button">
+    <img src="assets/img/svg/send.svg" alt="send">
+  </button>
+</div>
+
+<div *ngIf="openFriendInfo() && receiver">
+  <app-friend-info
+    [receiver]="receiver"
+    (closeFriendInfoEvent)="onCloseFriendInfo()"
+  ></app-friend-info>
+</div>
+<div class="modal-overlay" *ngIf="openFriendInfo()"></div>

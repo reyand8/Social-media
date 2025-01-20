@@ -1,0 +1,35 @@
+:host {
+  margin: 10px;
+}
+
+.friend-message__date {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--main-light-color);
+  padding: 1rem;
+}
+
+.friend-message__wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.friend-message__content {
+  display: grid;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.friend-message__text {
+  background: var(--main-light-color);
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+  color: var(--dark-color);
+  padding: 0.75rem 1.5rem;
+  max-width: 20rem;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}

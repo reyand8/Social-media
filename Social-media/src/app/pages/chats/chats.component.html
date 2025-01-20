@@ -1,0 +1,12 @@
+<div class="chats-container">
+  <div *ngIf="isLoading" class="loading">
+    Loading...
+  </div>
+  <div *ngIf="!isLoading && userChats.length > 0">
+      <app-chat-card *ngFor="let receiver of userChats" [receiver]="receiver">
+      </app-chat-card>
+  </div>
+  <div *ngIf="!isLoading && userChats.length === 0" class="no-chats">
+     Chat section is empty
+  </div>
+</div>

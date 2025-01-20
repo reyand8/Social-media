@@ -23,7 +23,7 @@
     <div *ngIf="profile.id !== (myProfile$ | async)?.id">
       <div *ngIf="followingIds.includes(profile.id); else followButton">
         <div class="profile-card__following_btns">
-          <div class="btn profile-card__send_btn">
+          <div class="btn profile-card__send_btn" [routerLink]="['/messenger', profile.id]">
             <img src="assets/img/svg/send.svg" alt="send">
             Send message
           </div>
