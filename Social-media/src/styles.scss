@@ -1,9 +1,11 @@
 @import "styles/fonts";
 @import "styles/margins";
 @import "styles/auth";
+@import "styles/modal.css";
 
 :root {
   --main-bg-color: #494956;
+  --main-bg-color-transperent: rgba(53, 53, 77, 0.62);
   --main-text-color: #ffffff;
   --main-light-color: #ffffff;
   --main-hover-color: rgba(3, 3, 3, 0.2);
@@ -14,6 +16,7 @@
   --dark-color: #000000FF;
   --error-color: #ff5151;
   --successfully-color: #55ea40;
+  --my-message-color: #1d4ed8;
 }
 
 *,
