@@ -1,6 +1,6 @@
-<img class="following-image" [src]="profile.image | imgUrl" [alt]="profile.lastName">
-<strong class="following-subtitle">
-  {{ profile.firstName }} {{ profile.lastName }}
-</strong>
-
-
+<div [routerLink]="['/messenger', profile.id]" class="following-card">
+  <img class="following-card__image" [src]="profile.image | imgUrl" [alt]="profile.lastName || 'No Last Name'">
+  <strong class="following-card__subtitle">
+    {{ profile.firstName }} {{ profile.lastName }}
+  </strong>
+</div>

@@ -5,15 +5,17 @@
              formControlName="search"
              placeholder="Search...">
     </label>
+
     <div class="profile-card__wrapper mt32" *ngIf="(filteredProfiles$ | async) as profiles">
       <ng-container *ngIf="profiles.length > 0; else noResults">
         <app-profile-card *ngFor="let profile of profiles"
                           [myProfile$]="myProfile$"
-                          [followingIds]="followingIds"
+                          [followingIds]="(followingIds$ | async) || []"
                           [profile]="profile">
         </app-profile-card>
       </ng-container>
     </div>
+
     <ng-template #noResults>
       <p class="not-found">No profiles found.</p>
     </ng-template>

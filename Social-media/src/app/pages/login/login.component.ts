@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../auth/auth.service';
-import { ILoginPayload } from '../../auth/auth.interface';
+import { ILoginPayload, ITokenResponse } from '../../auth/auth.interface';
 
 
 interface ILoginForm {
@@ -35,7 +35,7 @@ export class LoginComponent {
     if (this.form.valid) {
       const payload: ILoginPayload = this.form.value as ILoginPayload;
       this.authService.login(payload).subscribe({
-        next: (res) => {
+        next: (res: ITokenResponse) => {
           this.router.navigate(['']);
         },
         error: (err): void => {

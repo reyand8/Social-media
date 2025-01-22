@@ -21,8 +21,6 @@
         />
       </div>
 
-
-
       <label for="firstName" class="control-label">
         First Name
         <input id="firstName" formControlName="firstName" class="control-input my-profile-input mb16" type="text">
@@ -43,7 +41,7 @@
       <label class="control-label">
         Hobbies
         <div class="hobby-wrapper my-profile-input">
-        <span *ngFor="let hob of hobby.controls; let i = index" class="hobby">
+        <span *ngFor="let hob of hobby.controls; let i = index; trackBy: trackByIndex" class="hobby">
           {{ hob.value }}
           <button type="button" class="btn-remove-hobby" (click)="removeHobby(i)">Х</button>
         </span>

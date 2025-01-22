@@ -1,13 +1,14 @@
-import {Component, inject, signal, WritableSignal} from '@angular/core';
-import {AbstractControl, FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { ProfileService } from '../../data/services/profile.service';
 import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
-import {IMyProfile, IMyProfileForm} from './profile.interface';
-import {Router} from "@angular/router";
-import {SvgComponent} from "../../common-ui/svg/svg.component";
+import { IMyProfile, IMyProfileForm } from './profile.interface';
+import { SvgComponent } from '../../common-ui/svg/svg.component';
+import { IUpdateProfile } from '../../data/interfaces/profile.interface';
 
 
 @Component({
@@ -27,6 +28,7 @@ import {SvgComponent} from "../../common-ui/svg/svg.component";
 export class ProfileComponent {
   profileService: ProfileService = inject(ProfileService);
   router: Router = inject(Router);
+
   myProfile$: Observable<any> = this.profileService.getMyProfile();
   isSuccessfully: WritableSignal<boolean> = signal<boolean>(false);
   imagePreview: string | null = null;
@@ -54,7 +56,6 @@ export class ProfileComponent {
     const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       this.form.get('image')?.setValue(file);
-
       const reader: FileReader = new FileReader();
       reader.onload = (): void => {
         this.imagePreview = reader.result as string;
@@ -62,7 +63,6 @@ export class ProfileComponent {
       reader.readAsDataURL(file);
     }
   }
-
 
   initializeForm(): void {
     this.myProfile$.subscribe(profile => {
@@ -73,19 +73,19 @@ export class ProfileComponent {
           description: profile.description,
           image: profile.image || null,
         });
-        const hobbiesArray = this.form.get('hobby') as FormArray;
-        hobbiesArray.clear();
-        profile.hobby.forEach((hobby: string) => hobbiesArray.push(new FormControl(hobby)));
+        this.updateHobbies(profile.hobby);
       }
     });
   }
 
+  updateHobbies(hobbies: string[]): void {
+    const hobbiesArray = this.hobby;
+    hobbiesArray.clear();
+    hobbies.forEach((hobby: string) => hobbiesArray.push(new FormControl(hobby)));
+  }
+
   getFormError(): boolean {
-    const controls = this.form.controls;
-    return Object.keys(controls).some(controlName => {
-      const control = controls[controlName as keyof IMyProfileForm] as AbstractControl;
-      return control?.hasError('required') && control.dirty;
-    });
+    return Object.values(this.form.controls).some(control => control.hasError('required') && control.dirty);
   }
 
   addHobby(hobbyInput: HTMLInputElement): void {
@@ -97,30 +97,38 @@ export class ProfileComponent {
   }
 
   get hobby(): FormArray {
-    return this.form.get('hobby') as FormArray;
+    return this.form.get('hobby') as FormArray<FormControl<string>>;
   }
 
   removeHobby(index: number): void {
-    this.hobby.removeAt(index);
+    if (index >= 0 && index < this.hobby.length) {
+      this.hobby.removeAt(index);
+    }
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 
   saveChanges(): void {
     if (this.form.valid) {
-      const updatedProfile: Required<IMyProfile> =
-        { ...this.form.value } as Required<IMyProfile>;
-      if (typeof updatedProfile.image === 'string') {
-        delete updatedProfile.image;
-      }
+      const updatedProfile: IMyProfile = this.prepareProfileForUpdate();
       this.profileService.updateProfile(updatedProfile).subscribe({
-        next: (profile: IMyProfile): void => {
+        next: (profile: IUpdateProfile): void => {
           this.isSuccessfully.set(true);
           this.form.patchValue(profile);
         },
-        error: (error): void => {
-          console.error('Failed to update profile', error);
-        },
+        error: this.handleError.bind(this),
       });
     }
+  }
+
+  prepareProfileForUpdate(): IMyProfile {
+    const updatedProfile: Required<IMyProfile> = { ...this.form.value } as Required<IMyProfile>;
+    if (typeof updatedProfile.image === 'string') {
+      delete updatedProfile.image;
+    }
+    return updatedProfile;
   }
 
   removeMyProfile() {
@@ -132,5 +140,9 @@ export class ProfileComponent {
         console.error('Error removing profile:', err);
       }
     });
+  }
+
+  handleError(error: any): void {
+    console.error('Error: ', error);
   }
 }
