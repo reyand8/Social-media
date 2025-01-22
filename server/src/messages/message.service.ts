@@ -5,10 +5,21 @@ import { Message, Prisma } from '@prisma/client';
 import { IChatPerson } from './message.interface';
 
 
+/**
+ * Service for managing messages and chat interactions.
+ * Handles database operations using Prisma.
+ */
 @Injectable()
 export class MessageService {
     constructor(private readonly prisma: PrismaService) {}
 
+    /**
+     * Retrieves messages between two users, sorted by creation date.
+     *
+     * @param senderId - ID of the sender.
+     * @param receiverId - ID of the receiver.
+     * @returns A list of messages between the sender and receiver.
+     */
     async getMessages(senderId: number, receiverId: number): Promise<Message[]> {
         return this.prisma.message.findMany({
             where: {
@@ -39,6 +50,12 @@ export class MessageService {
         } as Prisma.MessageFindManyArgs);
     }
 
+    /**
+     * Retrieves the chat participants for a specific user.
+     *
+     * @param userId - ID of the user.
+     * @returns A list of chat participants with their details.
+     */
     async getChats(userId: number): Promise<IChatPerson[]> {
         const conversations = await this.prisma.message.findMany({
             where: {
@@ -74,6 +91,14 @@ export class MessageService {
         return result;
     }
 
+    /**
+     * Creates a new message between two users.
+     *
+     * @param senderId - ID of the sender.
+     * @param receiverId - ID of the receiver.
+     * @param text - The message text.
+     * @returns The created message.
+     */
     async createMessage(senderId: number, receiverId: number, text: string): Promise<Message> {
         return this.prisma.message.create({
             data: {
@@ -84,6 +109,14 @@ export class MessageService {
         });
     }
 
+    /**
+     * Deletes a message by its ID if the user is authorized.
+     *
+     * @param id - ID of the message to delete.
+     * @param userId - ID of the user attempting to delete the message.
+     * @returns The deleted message.
+     * @throws Error if the message is not found or the user is not authorized.
+     */
     async deleteMessage(id: number, userId: number): Promise<Message> {
         const message = await this.prisma.message.findFirst({
             where: {
@@ -100,6 +133,15 @@ export class MessageService {
     }
 
 
+    /**
+     * Updates the text of a message if the user is authorized.
+     *
+     * @param editMessageId - ID of the message to edit.
+     * @param text - New text for the message.
+     * @param userId - ID of the user attempting to edit the message.
+     * @returns The updated message.
+     * @throws Error if the message is not found or the user is not authorized.
+     */
     async updateMessage(editMessageId: number, text: string, userId: number): Promise<Message> {
         const message = await this.prisma.message.findFirst({
             where: {
@@ -107,11 +149,9 @@ export class MessageService {
                 senderId: userId,
             },
         });
-
         if (!message) {
             throw new Error('Message not found or user is not authorized');
         }
-
         return this.prisma.message.update({
             where: { id: editMessageId },
             data: { text },
