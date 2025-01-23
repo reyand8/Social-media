@@ -80,7 +80,6 @@ export class AuthService {
   }
 
   saveTokens(res: ITokenResponse): void {
-    console.log(res.access_token)
     this.token =  res.access_token
     this.refreshToken = res.refresh_token
     this.cookieService.set('token', this.token)
