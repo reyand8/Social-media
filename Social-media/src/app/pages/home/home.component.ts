@@ -7,6 +7,24 @@ import { ProfileService } from '../../data/services/profile.service';
 import { IProfile } from '../../data/interfaces/profile.interface';
 
 
+/**
+ * This component is responsible for displaying a list of profiles and the
+ * current user's profile. It fetches profiles using the `ProfileService`
+ * and handles loading states and error handling.
+ *
+ * Variables:
+ * - `profileService`: An instance of the `ProfileService` used to interact with the backend API for profile data.
+ * - `followingIds`: An array that stores the list of IDs of profiles that the current user is following.
+ * - `profiles$`: An observable that holds the list of profiles retrieved from the backend.
+ * - `myProfile$`: An observable that holds the current user's profile, including the list of IDs of profiles they follow.
+
+ * Methods:
+ * - `trackById()`: A trackBy function used in the `ngFor` directive to efficiently track profiles by their unique ID.
+ *
+ * Private Methods:
+ * - `loadFollowingIds()`: Loads the list of IDs that the current user is following.
+ *
+ */
 @Component({
   selector: 'app-search',
   standalone: true,

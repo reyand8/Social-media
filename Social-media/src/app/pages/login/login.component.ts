@@ -5,13 +5,28 @@ import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../auth/auth.service';
 import { ILoginPayload, ITokenResponse } from '../../auth/auth.interface';
+import {ILoginForm} from './login.interface';
 
 
-interface ILoginForm {
-  username: FormControl<string | null>;
-  password: FormControl<string | null>;
-}
-
+/**
+ * LoginComponent
+ *
+ * This component implements a login form. It includes input fields for
+ * the username and password, as well as a submit button.
+ * The component also handles password visibility toggling, error handling,
+ * and navigation upon successful authentication.
+ *
+ * Variables:
+ * - `isPasswordVisible`: A signal controlling the visibility of the password.
+ * - `errorMessage`: A signal displaying error messages during authentication.
+ * - `form`: A form group for user input containing `username` and `password` fields, validated through validators.
+ *
+ * Methods:
+ * - `onSubmit()`: Submits the form for authentication, handles errors.
+ * - `getPasswordVisibility()`: Returns the current password visibility state.
+ * - `setPasswordVisibility(visibility: boolean)`: Sets the password visibility state.
+ * - `goToSignup()`: Navigates the user to the signup page.
+ */
 @Component({
   selector: 'app-login',
   standalone: true,

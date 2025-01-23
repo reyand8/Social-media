@@ -5,18 +5,29 @@ import { Router } from '@angular/router';
 
 import { ModalWindowComponent } from './modalWindow/modal-window.component';
 import { AuthService } from '../../auth/auth.service';
-import { ISignupPayload } from './signup.interface';
+import { ISignupForm, ISignupPayload } from './signup.interface';
 
 
-interface ISignupForm {
-  firstName: FormControl<string | null>;
-  lastName: FormControl<string | null>;
-  password: FormControl<string | null>;
-  description: FormControl<string | null>;
-  hobbies: FormArray<FormControl<string>>;
-  profilePhoto: FormControl<File | null>;
-}
-
+/**
+ * This component provides a user registration form with the following features:
+ * - Form fields for first name, last name, password, description, hobbies, and profile photo.
+ * - Form validation, including required fields and minimum password length.
+ * - A modal window for confirmation before submission.
+ * - Integration with AuthService to handle user registration.
+ * - Navigation to the login page after successful registration.
+ *
+ * Key Methods:
+ * - `onSubmit()`: Handles form submission, validates the data, and sends it to the server.
+ * - `onShowModalWindow()`: Opens the modal window if required fields are valid.
+ * - `closeModal()`: Closes the modal window.
+ * - `getPasswordError()`: Checks for password validation errors.
+ * - `goToLogin()`: Navigates to the login page.
+ *
+ * Signals:
+ * - `isPasswordVisible`: Controls the visibility of the password field.
+ * - `showModalWindow`: Controls the visibility of the modal window.
+ * - `errorMessage`: Stores error messages from the server.
+ */
 @Component({
   selector: 'app-signup',
   standalone: true,

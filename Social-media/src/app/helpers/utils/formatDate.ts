@@ -1,3 +1,8 @@
+/**
+ * Formats a date string into a custom format (DD.MM HH:MM).
+ * @param dateString - The input date as a string.
+ * @returns The formatted date string in the format "DD.MM HH:MM".
+ */
 export function formatDate(dateString: string): string {
     const date: Date = new Date(dateString);
     const day: string = date.getDate().toString().padStart(2, '0');

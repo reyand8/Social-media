@@ -14,6 +14,37 @@ import { ImgUrlPipe } from '../../helpers/pipes/img-url.pipe';
 import { IMessage } from '../../data/interfaces/message.interface';
 
 
+/**
+ * MessengerComponent
+ *
+ * This component handles the messaging functionality between the user and their friends.
+ * It manages sending, editing, and deleting messages, loading user and receiver profiles,
+ * and real-time communication using WebSockets.
+ *
+ * Properties:
+ * - `openFriendInfo`: Signal controlling the visibility of the friend info section.
+ * - `newMessage`: Signal holding the content of the new message.
+ * - `editMessageId`: Signal holding the ID of the message being edited.
+ * - `messages`: Array storing the conversation messages.
+ * - `receiver`: The profile of the current message recipient.
+ * - `receiverId`: The ID of the message recipient.
+ * - `userId`: The ID of the current user.
+ * - `roomId`: The ID of the messaging room (used for WebSocket communication).
+ *
+ * Methods:
+ * - `initializeReceiverId()`: Initializes the receiver's ID from the URL.
+ * - `initializeUserData()`: Initializes the user data from local storage.
+ * - `loadReceiverProfile()`: Loads the profile of the receiver.
+ * - `loadMessages()`: Loads the conversation messages.
+ * - `listenForSocketEvents()`: Sets up WebSocket event listeners for message updates.
+ * - `sendMessage()`: Sends a new or edited message.
+ * - `editMessage()`: Edits an existing message.
+ * - `createMessage()`: Creates a new message.
+ * - `editMessageContent()`: Prepares the message content for editing.
+ * - `deleteMessage()`: Deletes a message from the conversation.
+ * - `onOpenFriendInfo()`: Opens the friend info section.
+ * - `onCloseFriendInfo()`: Closes the friend info section.
+ */
 @Component({
   selector: 'app-messenger',
   standalone: true,

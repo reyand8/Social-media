@@ -11,6 +11,31 @@ import { SvgComponent } from '../../common-ui/svg/svg.component';
 import { IUpdateProfile } from '../../data/interfaces/profile.interface';
 
 
+/**
+ * Manages the user's profile: displays, updates, and removes it.
+ * Supports image upload, hobby management, and form validation.
+ *
+ * Properties:
+ * - `myProfile$`: Observable for profile data.
+ * - `isSuccessfully`: Signal indicating profile update success.
+ * - `imagePreview`: Base64 string for image preview.
+ * - `form`: The profile form group.
+ *
+ * Methods:
+ * - `initializeForm()`: Initializes the form with profile data.
+ * - `onImageSelected()`: Handles image input and preview.
+ * - `triggerFileInput()`: Triggers file input programmatically.
+ * - `addHobby()`: Adds a hobby to the list if not a duplicate.
+ * - `removeHobby()`: Removes a hobby by index.
+ * - `saveChanges()`: Submits profile data to the backend.
+ * - `removeMyProfile()`: Deletes the profile and redirects to login.
+ *
+ * Workflow:
+ * 1. Initializes form with profile data.
+ * 2. Allows editing, hobby management, and image upload.
+ * 3. Saves updates to backend and handles errors.
+ * 4. Optionally, removes the profile and redirects to login.
+ */
 @Component({
   selector: 'app-profile',
   standalone: true,
