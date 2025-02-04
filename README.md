@@ -82,6 +82,9 @@ The project consists of the two parts (server and client).
 * Server
     - Navigate to the server directory: cd server
     - Install dependencies: npm install
+    - Configure .env file
+    - Generate database: npx prisma generate
+    - Add initial mutation: npx prisma migrate dev
     - Generate fake products: npm run seed
     - Run the server: npm run start:dev
     - Server will run on http://localhost:5001
@@ -91,6 +94,12 @@ The project consists of the two parts (server and client).
         - Run the project: npm run start
         - Open a browser and navigate to: http://localhost:4200
 
+
+* Using Docker
+    - Navigate to the project directory: cd Social-media
+    - Configure .env file
+    - Run: docker-compose up
+    - docker-compose exec app npx prisma migrate dev
 
 ____
 
