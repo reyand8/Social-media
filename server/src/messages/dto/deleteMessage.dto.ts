@@ -1,3 +1,3 @@
 export class DeleteMessageDto {
-    id: string;
+    id: number;
 }

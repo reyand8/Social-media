@@ -1,9 +1,9 @@
-import {BadRequestException} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 import { CreatePersonDto } from '../auth/dto/createPerson.dto';
 import { CreateMessageDto } from '../messages/dto/createMessage.dto';
-import {EditMessageDto} from '../messages/dto/editMessage.dto';
-import {DeleteMessageDto} from '../messages/dto/deleteMessage.dto';
+import { EditMessageDto } from '../messages/dto/editMessage.dto';
+import { DeleteMessageDto } from '../messages/dto/deleteMessage.dto';
 
 
 export function isValidData(createPersonDto: CreatePersonDto): boolean {
@@ -26,7 +26,7 @@ export function isValidData(createPersonDto: CreatePersonDto): boolean {
 }
 
 
-export function validateCreateMessageDto(createMessageDto: CreateMessageDto) {
+export function validateCreateMessageDto(createMessageDto: CreateMessageDto): void {
     const { receiverId, text } = createMessageDto;
 
     if (!receiverId || typeof receiverId !== 'number' || isNaN(receiverId)) {
@@ -43,7 +43,7 @@ export function validateCreateMessageDto(createMessageDto: CreateMessageDto) {
 }
 
 
-export function validateEditMessageDto(editMessageDto: EditMessageDto) {
+export function validateEditMessageDto(editMessageDto: EditMessageDto): void {
     const { editMessageId, text } = editMessageDto;
 
     if (!editMessageId || typeof editMessageId !== 'number' || isNaN(editMessageId)) {
@@ -59,7 +59,7 @@ export function validateEditMessageDto(editMessageDto: EditMessageDto) {
     }
 }
 
-export function validateDeleteMessageDto(deleteMessageDto: DeleteMessageDto) {
+export function validateDeleteMessageDto(deleteMessageDto: DeleteMessageDto): void {
     const { id } = deleteMessageDto;
 
     if (!id || typeof id !== 'number' || isNaN(id)) {

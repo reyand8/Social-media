@@ -1,4 +1,4 @@
 export class EditMessageDto {
-    editMessageId: string;
+    editMessageId: number;
     text: string;
 }
