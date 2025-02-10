@@ -11,7 +11,7 @@ import { AppModule } from './app.module';
  * or defaults to 8080.
  */
 async function bootstrap(): Promise<void> {
-  const PORT: string | 8080 = process.env.API_PORT || 8080;
+  const PORT: string | 8080 = process.env.PORT || 8080;
 
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
