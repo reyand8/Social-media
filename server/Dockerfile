@@ -6,11 +6,11 @@ COPY package*.json ./
 
 RUN npm install
 
+COPY ./prisma/schema.prisma ./prisma/schema.prisma
+
 
 COPY . .
 
-RUN npx prisma generate --schema=./prisma/schema.prisma
+RUN npx prisma generate
 
-EXPOSE 5001
-
-CMD ["sh", "-c", "npm run seed && npm run start:dev"]
+CMD ["sh", "-c", "npx prisma migrate dev --name init && npm run seed && npm run start:dev"]

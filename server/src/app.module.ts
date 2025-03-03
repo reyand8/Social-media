@@ -2,7 +2,6 @@ import {Module, OnModuleInit} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { path } from 'app-root-path';
-import { ServerOptions } from 'socket.io';
 
 import { PrismaService } from './prisma.service';
 import { PersonModule } from './person/person.module';
@@ -38,20 +37,21 @@ export class AppModule implements OnModuleInit {
   onModuleInit(): void {
     const options: any = {
       cors: {
-        origin: 'http://localhost:4200',
+        origin: process.env.FRONTEND_URL || 'http://localhost:4200',
         methods: ['GET', 'POST', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
       },
     };
 
-    const server =
-        new SocketIoAdapter().createIOServer(3001, options);
+    const port = process.env.SOCKET_PORT ? parseInt(process.env.SOCKET_PORT) : 3001;
+
+    const server = new SocketIoAdapter().createIOServer(port, options);
     this.socketService.setServer(server);
 
     server.on('connection', (socket): void => {
       this.socketService.onConnection(socket);
     });
-  }
 
+  }
 }
