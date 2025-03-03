@@ -99,7 +99,6 @@ The project consists of the two parts (server and client).
     - Navigate to the project directory: cd Social-media
     - Configure .env file
     - Run: docker-compose up
-    - docker-compose exec app npx prisma migrate dev
 
 ____
 
